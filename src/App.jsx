@@ -16,6 +16,7 @@ import ProjectUpdate from './pages/Home/ProjectUpdate';
 import DonationPage from './pages/Home/DonationPage';
 import TopRatedSlider from './pages/Home/Home';
 import Projects from './pages/Home/Projects';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             <Route path="/" element={<Login />} />
           </Routes>
         </main>
+        <Footer />
         <ToastContainer position="bottom-right" />
       </div>
     </BrowserRouter>
