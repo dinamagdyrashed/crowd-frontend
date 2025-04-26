@@ -31,28 +31,32 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-background text-text-dark shadow-sm">
+    <nav style={{ backgroundColor: '#ffffff', color: '#1e1e1e' }} className="shadow-sm">
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         {/* Mobile menu button */}
         <div className="md:hidden flex items-center">
           <button
             onClick={toggleMenu}
-            className="text-text-dark hover:text-primary focus:outline-none"
+            style={{ color: '#1e1e1e' }}
+            className="hover:text-[#006A71] focus:outline-none"
           >
-            {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+            {isMenuOpen ? <FaTimes size={24} className='text-[#006A71]' /> : <FaBars size={24} className='text-[#006A71]' />}
           </button>
         </div>
 
         {/* Left side - hidden on mobile */}
         <div className="hidden md:flex items-center space-x-4">
-          <NavLink to="/search" className="flex items-center gap-1 hover:text-primary">
+          <NavLink
+            to="/search"
+            className="flex items-center gap-1 hover:text-[#006A71]"
+          >
             <FaSearch className="text-sm" />
             <span>Search</span>
           </NavLink>
-          <NavLink to="/home" className="hover:text-primary">
+          <NavLink to="/home" className="hover:text-[#006A71]">
             Home
           </NavLink>
-          <NavLink to="/projects" className="hover:text-primary">
+          <NavLink to="/projects" className="hover:text-[#006A71]">
             Projects
           </NavLink>
         </div>
@@ -60,27 +64,49 @@ const Navbar = () => {
         {/* Center logo */}
         <NavLink
           to="/home"
-          className="text-primary text-xl font-bold tracking-wide mx-auto md:mx-0"
+          className="text-xl font-bold tracking-wide mx-auto md:mx-0"
+          style={{ color: '#006A71' }}
         >
-          Crowd<span className="text-secondary">Funding</span>
+          Crowd<span style={{ color: '#48A6A7' }}>Funding</span>
         </NavLink>
 
         {/* Right side - hidden on mobile */}
         <div className="hidden md:flex items-center space-x-4">
-          <NavLink to="/about" className="hover:text-primary">
+          <NavLink to="/about" className="hover:text-[#006A71]">
             About
           </NavLink>
           {user ? (
             <>
-              <NavLink to="/profile" className="hover:text-primary">Profile</NavLink>
-              <button onClick={handleLogout} className="text-sm text-red-600 hover:underline">Logout</button>
+              <NavLink to="/profile" className="hover:text-[#006A71]">
+                Profile
+              </NavLink>
+              <button
+                onClick={handleLogout}
+                className="text-sm text-red-600 hover:underline"
+              >
+                Logout
+              </button>
             </>
           ) : (
             <>
-              <NavLink to="/login" className="hover:text-primary">Sign in</NavLink>
+              <NavLink to="/login" className="hover:text-[#006A71]">
+                Sign in
+              </NavLink>
               <NavLink
                 to="/register"
-                className="border border-primary text-primary hover:bg-primary hover:text-white font-medium py-1 px-3 rounded-full transition"
+                className="border font-medium py-1 px-3 rounded-full transition"
+                style={{
+                  borderColor: '#006A71',
+                  color: '#006A71',
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = '#006A71';
+                  e.target.style.color = '#ffffff';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = 'transparent';
+                  e.target.style.color = '#006A71';
+                }}
               >
                 Start a GoFundMe
               </NavLink>
@@ -90,11 +116,13 @@ const Navbar = () => {
 
         {/* Mobile menu */}
         {isMenuOpen && (
-          <div className="md:hidden absolute top-12 left-0 right-0 bg-white shadow-md z-50 py-4 px-4">
+          <div className="md:hidden absolute top-12 left-0 right-0 shadow-md z-50 py-4 px-4"
+            style={{ backgroundColor: '#ffffff' }}
+          >
             <div className="flex flex-col space-y-4">
               <NavLink
                 to="/search"
-                className="flex items-center gap-1 hover:text-primary"
+                className="flex items-center gap-1 hover:text-[#006A71]"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <FaSearch className="text-sm" />
@@ -102,21 +130,21 @@ const Navbar = () => {
               </NavLink>
               <NavLink
                 to="/home"
-                className="hover:text-primary"
+                className="hover:text-[#006A71]"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Home
               </NavLink>
               <NavLink
                 to="/projects"
-                className="hover:text-primary"
+                className="hover:text-[#006A71]"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Projects
               </NavLink>
               <NavLink
                 to="/about"
-                className="hover:text-primary"
+                className="hover:text-[#006A71]"
                 onClick={() => setIsMenuOpen(false)}
               >
                 About
@@ -126,7 +154,7 @@ const Navbar = () => {
                 <>
                   <NavLink
                     to="/profile"
-                    className="hover:text-primary"
+                    className="hover:text-[#006A71]"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Profile
@@ -145,14 +173,26 @@ const Navbar = () => {
                 <>
                   <NavLink
                     to="/login"
-                    className="hover:text-primary"
+                    className="hover:text-[#006A71]"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Sign in
                   </NavLink>
                   <NavLink
                     to="/register"
-                    className="border border-primary text-primary hover:bg-primary hover:text-white font-medium py-1 px-3 rounded-full transition text-center"
+                    className="border font-medium py-1 px-3 rounded-full transition text-center"
+                    style={{
+                      borderColor: '#006A71',
+                      color: '#006A71',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = '#006A71';
+                      e.target.style.color = '#ffffff';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = 'transparent';
+                      e.target.style.color = '#006A71';
+                    }}
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Start a GoFundMe
