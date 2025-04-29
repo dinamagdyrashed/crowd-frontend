@@ -136,7 +136,7 @@ const ProjectUpdate = () => {
 
         selectedTags.forEach(tag => data.append('tags_ids', tag));
 
-        newImages.forEach((image, index) => {
+        newImages.forEach((image) => {
             data.append('images_files', image);
         });
 

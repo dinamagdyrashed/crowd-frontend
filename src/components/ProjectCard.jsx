@@ -14,17 +14,12 @@ const ProjectCard = ({ project }) => {
         textLight: "#ffffff"
     };
 
-    // Calculate progress percentage (using API field progress_percentage if available)
     const progress = project.progress_percentage !== undefined
         ? project.progress_percentage
         : project.total_donations && project.total_target
             ? Math.min(100, (project.total_donations / project.total_target) * 100)
             : 0;
 
-    // Format currency (using total_donations instead of current_amount)
-    const formattedAmount = project.total_donations
-        ? `$${parseFloat(project.total_donations).toLocaleString()} raised`
-        : "$0 raised";
 
     const getFirstImageUrl = (images) => {
         if (images && images.length > 0) {
@@ -37,7 +32,6 @@ const ProjectCard = ({ project }) => {
         navigate(`/projects/${projectId}/donate`);
     };
 
-    // Add error handling for missing project data
     if (!project) {
         return (
             <div className="bg-white rounded-lg shadow-md p-4 text-center">
@@ -71,9 +65,7 @@ const ProjectCard = ({ project }) => {
                 )}
             </div>
 
-            {/* Project Content */}
             <div className="p-4">
-                {/* Category */}
                 <div className="flex justify-between items-start mb-1">
                     <span className="text-xs font-semibold px-2 py-1 rounded-full"
                         style={{ backgroundColor: colors.accent, color: colors.textDark }}>
@@ -90,7 +82,6 @@ const ProjectCard = ({ project }) => {
                     )}
                 </div>
 
-                {/* Title */}
                 <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
                     <Link
                         to={`/projects/${project.id}`}
@@ -101,12 +92,10 @@ const ProjectCard = ({ project }) => {
                     </Link>
                 </h3>
 
-                {/* Owner */}
                 <p className="text-sm text-gray-600 mb-3">
                     By {project.owner || "Anonymous"}
                 </p>
 
-                {/* Progress Bar */}
                 <div className="mb-2">
                     <div className="flex justify-between text-xs mb-1">
                         <span style={{ color: colors.primary }}>
@@ -127,14 +116,12 @@ const ProjectCard = ({ project }) => {
                     </div>
                 </div>
 
-                {/* Days remaining */}
                 {project.end_time && (
                     <p className="text-xs text-gray-500 mb-3">
                         {Math.ceil((new Date(project.end_time) - new Date()) / (1000 * 60 * 60 * 24))} days remaining
                     </p>
                 )}
 
-                {/* Donate Button */}
                 <motion.button
                     onClick={() => handleDonateNow(project.id)}
                     className="w-full py-2 rounded-md text-white font-medium"

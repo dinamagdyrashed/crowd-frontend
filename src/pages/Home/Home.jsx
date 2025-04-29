@@ -17,7 +17,6 @@ const Home = () => {
     const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
 
-    // Color palette
     const colors = {
         primary: "#006A71",
         secondary: "#48A6A7",
@@ -27,7 +26,6 @@ const Home = () => {
         textLight: "#ffffff"
     };
 
-    // Helper function to get the first available image URL
     const getFirstImageUrl = (images) => {
         if (images && images.length > 0) {
             return `http://localhost:8000${images[0].url}`;
@@ -35,7 +33,6 @@ const Home = () => {
         return null;
     };
 
-    // Debounced search function
     const debouncedSearch = useCallback(
         debounce((query) => {
             if (query.trim() !== "") {
@@ -51,8 +48,8 @@ const Home = () => {
 
     const handleSearchInputChange = (e) => {
         const query = e.target.value;
-        setSearchQuery(query);
-        debouncedSearch(query);
+        setSearchQuery(e.target.value);
+        debouncedSearch(searchQuery);
     };
 
     useEffect(() => {
@@ -91,7 +88,6 @@ const Home = () => {
         navigate(`/projects/${projectId}/donate`);
     };
 
-    // Slider settings for top-rated projects
     const sliderSettings = {
         dots: true,
         infinite: true,
@@ -145,9 +141,6 @@ const Home = () => {
             {/* Search Bar */}
             <div
                 className="max-w-xl mx-auto"
-                initial={{ scale: 0.9 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.5 }}
             >
                 <input
                     type="text"
