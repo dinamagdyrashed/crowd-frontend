@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import Slider from "react-slick";
 import Alert from '../../alert/Alert';
-import { FaCheckCircle, FaExclamationCircle, FaSpinner, FaFlag, FaComment, FaDonate, FaEdit, FaTimes } from 'react-icons/fa';
+import { FaExclamationCircle, FaSpinner, FaFlag, FaComment, FaDonate, FaEdit, FaTimes } from 'react-icons/fa';
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -113,6 +113,7 @@ const ProjectDetails = () => {
             setSimilarProjects(response.data);
         } catch (err) {
             setSimilarError('Failed to load similar projects.');
+            Alert.error('Error!', err.response.data.detail);
         } finally {
             setSimilarLoading(false);
         }
@@ -126,6 +127,7 @@ const ProjectDetails = () => {
             setComments(response.data);
         } catch (err) {
             setCommentsError('Failed to load comments.');
+            Alert.error('Error!', err.response.data.detail);
         } finally {
             setCommentsLoading(false);
         }
