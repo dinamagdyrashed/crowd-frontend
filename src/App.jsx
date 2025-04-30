@@ -16,7 +16,7 @@ import ProjectUpdate from './pages/Home/ProjectUpdate';
 import TopRatedSlider from './pages/Home/Home';
 import Projects from './pages/Home/Projects';
 import Footer from './components/Footer';
-import DonationPage from './pages/Profile/DonationPage';
+import DonationPage from './pages/Home/DonationPage';
 
 function App() {
   return (
