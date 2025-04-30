@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Alert from '../../alert/Alert';
 import { FaDonate, FaSpinner, FaArrowLeft } from 'react-icons/fa';
 import { motion } from 'framer-motion';
@@ -8,26 +8,66 @@ import { motion } from 'framer-motion';
 const DonationPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
     const [amount, setAmount] = useState('');
     const [loading, setLoading] = useState(false);
+    const [recentDonations, setRecentDonations] = useState([]);
+    const [paymentSuccess, setPaymentSuccess] = useState(false);
+
+    useEffect(() => {
+        // Check if redirected after payment success
+        const params = new URLSearchParams(location.search);
+        if (params.get('payment') === 'success') {
+            setPaymentSuccess(true);
+            fetchRecentDonations();
+        }
+    }, [location.search]);
+
+    const fetchRecentDonations = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/projects/donations/`);
+            if (response.data.donations) {
+                setRecentDonations(response.data.donations);
+            }
+        } catch (error) {
+            console.error('Failed to fetch recent donations', error);
+        }
+    };
 
     const handleDonation = async (e) => {
         e.preventDefault();
         setLoading(true);
 
         try {
-            await axios.post('http://127.0.0.1:8000/api/projects/donations/', {
+            // Call backend API to create Paymob payment intention
+            const response = await axios.post('http://localhost:8000/api/projects/paymob/create_intention/', {
                 project: id,
-                amount: parseFloat(amount),
+                amount: parseFloat(amount), // Convert to cents
+                payment_methods: [5066659, 5066761],
+                billing_data: {
+                    first_name: '', // Optionally fill with user data
+                    last_name: '',
+                    email: '',
+                    phone_number: '',
+                    country: ''
+                },
+                notification_url: 'http://localhost:8000/api/projects/paymob/callback/',
+                redirection_url: `http://localhost:3000/projects/${id}/?payment=success`
             }, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
                 }
             });
-            Alert.success('Thank you!', 'Your donation has been successfully processed.');
-            navigate(`/projects/${id}`);
+
+            const { client_secret, public_key } = response.data;
+            if (client_secret && public_key) {
+                // Redirect to Paymob unifiedcheckout URL
+                window.location.href = `https://accept.paymob.com/unifiedcheckout/?publicKey=${public_key}&clientSecret=${client_secret}`;
+            } else {
+                Alert.error('Error!', 'Failed to get payment keys.');
+            }
         } catch (err) {
-            Alert.error('Error!', err.response.data.detail || 'There was an error processing your donation.');
+            Alert.error('Error!', err.response?.data?.detail || 'There was an error processing your donation.');
         } finally {
             setLoading(false);
         }
@@ -60,6 +100,12 @@ const DonationPage = () => {
                     </div>
 
                     <div className="p-6 sm:p-8">
+                        {paymentSuccess && (
+                            <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-lg">
+                                Thank you for your donation! Your support makes a difference.
+                            </div>
+                        )}
+
                         <form onSubmit={handleDonation} className="space-y-6">
                             <div className="relative">
                                 <label className="block text-[#1e1e1e] font-medium mb-2">Donation Amount ($)</label>
