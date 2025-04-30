@@ -13,10 +13,10 @@ import styles from './App.module.css';
 import ProjectDetails from './pages/Home/ProjectDetails';
 import CreateProject from './pages/Home/CreateProject';
 import ProjectUpdate from './pages/Home/ProjectUpdate';
-import DonationPage from './pages/Home/DonationPage';
 import TopRatedSlider from './pages/Home/Home';
 import Projects from './pages/Home/Projects';
 import Footer from './components/Footer';
+import DonationPage from './pages/Profile/DonationPage';
 
 function App() {
   return (
