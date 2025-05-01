@@ -17,6 +17,7 @@ import DonationPage from './pages/Home/DonationPage';
 import TopRatedSlider from './pages/Home/Home';
 import Projects from './pages/Home/Projects';
 import Footer from './components/Footer';
+import Categories from './pages/Categories/Categories';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/home" element={<Home />} />
             <Route path="/" element={<Login />} />
+            <Route path="/categories" element={<Categories />} />
           </Routes>
         </main>
         <Footer />
