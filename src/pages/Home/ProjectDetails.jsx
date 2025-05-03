@@ -469,56 +469,7 @@ const ProjectDetails = () => {
                         )}
                     </div>
 
-                    <div className="mb-8">
-                        <h2 className="text-xl font-bold text-[#006A71] mb-4">Similar Projects</h2>
-                        {similarLoading && (
-                            <div className="flex justify-center">
-                                <FaSpinner className="animate-spin text-[#006A71] text-2xl" />
-                            </div>
-                        )}
-                        {similarError && <p className="text-red-500">{similarError}</p>}
-                        {!similarLoading && similarProjects.length === 0 && (
-                            <p className="text-[#1e1e1e]">No similar projects found.</p>
-                        )}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {similarProjects.map(similar => {
-                                const imageUrl = similar.images && similar.images.length > 0
-                                    ? `http://localhost:8000${similar.images[0].url}`
-                                    : null;
-                                return (
-                                    <Link
-                                        key={similar.id}
-                                        to={`/projects/${similar.id}`}
-                                        className="border border-[#9ACBD0] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition duration-200"
-                                    >
-                                        {imageUrl ? (
-                                            <img
-                                                src={imageUrl}
-                                                alt={similar.title}
-                                                className="w-full h-40 object-cover"
-                                            />
-                                        ) : (
-                                            <div className="w-full h-40 bg-[#9ACBD0] flex items-center justify-center text-[#1e1e1e]">
-                                                No Image
-                                            </div>
-                                        )}
-                                        <div className="p-4">
-                                            <h3 className="text-lg font-semibold text-[#006A71] mb-1">{similar.title}</h3>
-                                            <p className="text-sm text-[#1e1e1e] line-clamp-2">{similar.details}</p>
-                                            <div className="mt-2 flex justify-between items-center">
-                                                <span className="text-xs text-[#1e1e1e]">
-                                                    {similar.progress_percentage}% funded
-                                                </span>
-                                                <span className="text-xs font-medium text-[#006A71]">
-                                                    ${similar.total_donations} raised
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                );
-                            })}
-                        </div>
-                    </div>
+
 
                     <div className="flex flex-wrap justify-center gap-4 mb-8">
                         <button
@@ -644,6 +595,58 @@ const ProjectDetails = () => {
                         </motion.div>
                     </div>
                 )}
+                <div className="p-6 sm:p-8">
+                    <div className="mb-8">
+                        <h2 className="text-xl font-bold text-[#006A71] mb-4">Similar Projects</h2>
+                        {similarLoading && (
+                            <div className="flex justify-center">
+                                <FaSpinner className="animate-spin text-[#006A71] text-2xl" />
+                            </div>
+                        )}
+                        {similarError && <p className="text-red-500">{similarError}</p>}
+                        {!similarLoading && similarProjects.length === 0 && (
+                            <p className="text-[#1e1e1e]">No similar projects found.</p>
+                        )}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {similarProjects.map(similar => {
+                                const imageUrl = similar.images && similar.images.length > 0
+                                    ? `http://localhost:8000${similar.images[0].url}`
+                                    : null;
+                                return (
+                                    <Link
+                                        key={similar.id}
+                                        to={`/projects/${similar.id}`}
+                                        className="border border-[#9ACBD0] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition duration-200"
+                                    >
+                                        {imageUrl ? (
+                                            <img
+                                                src={imageUrl}
+                                                alt={similar.title}
+                                                className="w-full h-40 object-cover"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-40 bg-[#9ACBD0] flex items-center justify-center text-[#1e1e1e]">
+                                                No Image
+                                            </div>
+                                        )}
+                                        <div className="p-4">
+                                            <h3 className="text-lg font-semibold text-[#006A71] mb-1">{similar.title}</h3>
+                                            <p className="text-sm text-[#1e1e1e] line-clamp-2">{similar.details}</p>
+                                            <div className="mt-2 flex justify-between items-center">
+                                                <span className="text-xs text-[#1e1e1e]">
+                                                    {similar.progress_percentage}% funded
+                                                </span>
+                                                <span className="text-xs font-medium text-[#006A71]">
+                                                    ${similar.total_donations} raised
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
