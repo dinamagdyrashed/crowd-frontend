@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
-import { 
+import { Link, useNavigate } from "react-router-dom";
+import {
   FaPlus, FaSearch, FaFolder, FaSpinner,
   FaLaptop, FaHeartbeat, FaBook, FaPaintBrush, FaHandsHelping,
   FaArrowRight
@@ -20,7 +20,7 @@ const BASE_URL = 'http://localhost:8000';
 
 const Categories = () => {
   const navigate = useNavigate();
-  
+
   const [categories, setCategories] = useState([]);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,7 +30,7 @@ const Categories = () => {
 
   const handleStartCampaign = () => {
     navigate("/register");
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -124,12 +124,12 @@ const Categories = () => {
           <p className="text-lg mb-6" style={{ color: COLORS.textDark }}>
             People around the world are raising money for what they are passionate about.
           </p>
-          <button 
+          <button
             onClick={handleStartCampaign}
             className="px-6 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity"
             style={{ backgroundColor: COLORS.primary, color: COLORS.textLight }}
           >
-            Start New Campain
+            Start New Campaign
           </button>
         </div>
 
@@ -180,7 +180,11 @@ const Categories = () => {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     {categoryProjects.map((project) => (
-                      <div key={project.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
+                      <Link
+                        key={project.id}
+                        to={`/projects/${project.id}`}
+                        className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200"
+                      >
                         <div className="relative">
                           <img
                             src={
@@ -217,17 +221,17 @@ const Categories = () => {
                             ${project.total_donations.toLocaleString()} raised
                           </p>
                         </div>
-                      </div>
+                      </Link>
                     ))}
                   </div>
 
                   <div className="text-right mt-6">
-                    <a 
-                      href="#" 
+                    <a
+                      href="#"
                       className="text-sm font-semibold inline-flex items-center hover:underline"
                       style={{ color: COLORS.primary }}
                     >
-                      See more 
+                      See more
                       <FaArrowRight className="ml-2 relative top-0.5" style={{ color: COLORS.primary }} />
                     </a>
                   </div>
