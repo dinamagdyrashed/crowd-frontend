@@ -59,6 +59,12 @@ const Navbar = () => {
           <NavLink to="/campains" className="hover:text-[#006A71]">
             Campains
           </NavLink>
+          <NavLink to="/categories" className="hover:text-[#006A71]">
+          Categories
+          </NavLink>
+          <NavLink to="/" className="hover:text-[#006A71]">
+          Finished Projects
+          </NavLink>
         </div>
 
         {/* Center logo */}

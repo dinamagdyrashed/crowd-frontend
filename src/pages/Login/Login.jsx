@@ -5,7 +5,7 @@ import { authAPI } from '../../api/auth';
 import { useNavigate } from 'react-router-dom';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { useEffect } from 'react';
-import { FaFacebookF, FaEnvelope, FaLock } from 'react-icons/fa';
+import { FaEnvelope, FaLock, FaFacebookF } from 'react-icons/fa';
 
 const checkEmailExists = async (email) => {
   try {
@@ -80,7 +80,7 @@ const Login = () => {
           <h2 className="text-xl sm:text-4xl font-bold text-[#006A71] mb-6 text-center">Login to Athr</h2>
 
           {/* Social Login Buttons */}
-          <div className="flex justify-center gap-4 mb-6">
+          <div className="flex flex-col items-center gap-4 mb-6">
             <button
               type="button"
               onClick={async () => {
@@ -115,10 +115,12 @@ const Login = () => {
                   }
                 }, { scope: 'public_profile,email' });
               }}
-              className="p-2 border border-[#48A6A7] rounded-full hover:bg-[#48A6A7] hover:text-white transition duration-300"
+              className=" p-1 max-w-xs h-10 border border-[#48A6A7] rounded-lg hover:bg-[#48A6A7] hover:text-white transition duration-300 text-[#006A71] font-semibold text-sm sm:text-base flex items-center justify-center gap-2"
             >
-              <FaFacebookF className="text-[#006A71] hover:text-white w-5 h-5" />
+              <FaFacebookF className="w-5 h-5 text-[#006A71] hover:text-white" />
+              Continue with Facebook
             </button>
+
             <GoogleOAuthProvider clientId="75773251008-89sei1vuligu58shbmup4f5ttqq097o5.apps.googleusercontent.com">
               <GoogleLogin
                 onSuccess={async (credentialResponse) => {
@@ -162,21 +164,12 @@ const Login = () => {
                 render={(renderProps) => (
                   <button
                     type="button"
-                    className="p-2 border border-[#48A6A7] rounded-full hover:bg-[#48A6A7] transition duration-300 relative"
+                    className=" p-2 max-w-xs h-10 border border-[#48A6A7] rounded-lg hover:bg-[#48A6A7] hover:text-white transition duration-300 text-[#006A71] font-semibold text-sm sm:text-base flex items-center justify-center gap-2"
                     onClick={renderProps.onClick}
                     disabled={renderProps.disabled}
-                    style={{ width: '40px', height: '40px' }}
                   >
-                    <style jsx>{`
-                      button > div > div > div {
-                        display: none !important;
-                      }
-                      button > div {
-                        display: none !important;
-                      }
-                    `}</style>
                     <svg
-                      className="w-5 h-5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#006A71] group-hover:text-white"
+                      className="w-5 h-5 text-[#006A71] hover:text-white"
                       viewBox="0 0 24 24"
                     >
                       <text
@@ -192,6 +185,7 @@ const Login = () => {
                         G
                       </text>
                     </svg>
+                    Continue with Google
                   </button>
                 )}
               />
