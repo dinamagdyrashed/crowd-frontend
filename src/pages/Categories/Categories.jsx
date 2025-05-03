@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { 
+  FaPlus, FaSearch, FaFolder, FaSpinner,
   FaLaptop, FaHeartbeat, FaBook, FaPaintBrush, FaHandsHelping,
   FaArrowRight
 } from 'react-icons/fa';
@@ -15,7 +16,6 @@ const COLORS = {
   textLight: '#ffffff',
 };
 
-// Base URL for your backend
 const BASE_URL = 'http://localhost:8000';
 
 const Categories = () => {
@@ -25,11 +25,12 @@ const Categories = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [visibleCategoriesCount, setVisibleCategoriesCount] = useState(3); // Lowered to 3 for testing
-  const [showCategories, setShowCategories] = useState(false); // State for delaying category appearance
+  const [visibleCategoriesCount, setVisibleCategoriesCount] = useState(3);
+  const [showCategories, setShowCategories] = useState(false);
 
-   const handleStartCampaign = () => {
-      navigate("/register"); }
+  const handleStartCampaign = () => {
+    navigate("/register");
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,16 +38,11 @@ const Categories = () => {
         setLoading(true);
         setError(null);
 
-        // Fetch categories from API
         const categoriesResponse = await axios.get('http://localhost:8000/api/projects/categories/');
-        console.log('Categories:', categoriesResponse.data);
         setCategories(categoriesResponse.data);
 
-        // Fetch projects
         const projectsResponse = await axios.get('http://localhost:8000/api/projects/projects/');
-        console.log('Projects:', projectsResponse.data);
         if (projectsResponse.data.length === 0) {
-          // Mock data for testing
           setProjects([
             {
               id: 1,
@@ -83,38 +79,27 @@ const Categories = () => {
     fetchData();
   }, []);
 
-  // Effect to trigger the fade-in animation for categories
   useEffect(() => {
     if (!loading) {
       const timer = setTimeout(() => {
         setShowCategories(true);
-      }, 300); // Delay of 300ms
+      }, 300);
       return () => clearTimeout(timer);
     }
   }, [loading]);
 
-  // Group projects by category
   const getProjectsByCategory = (categoryId) => {
-    const filteredProjects = projects
-      .filter((project) => project.category.id === categoryId)
-      .slice(0, 3);
-    console.log(`Projects for category ${categoryId}:`, filteredProjects);
-    return filteredProjects;
+    return projects.filter((project) => project.category.id === categoryId).slice(0, 3);
   };
 
-  // Show more categories
   const handleShowMoreCategories = () => {
-    setVisibleCategoriesCount((prevCount) => {
-      const newCount = prevCount + 3; // Increment by 3 for testing
-      console.log('New visibleCategoriesCount:', newCount);
-      return newCount;
-    });
+    setVisibleCategoriesCount((prevCount) => prevCount + 3);
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: COLORS.background }}>
-        <p style={{ color: COLORS.textDark }}>Loading...</p>
+      <div className="flex items-center justify-center min-h-screen bg-[#F2EFE7]">
+        <FaSpinner className="animate-spin text-[#006A71] text-4xl" />
       </div>
     );
   }
@@ -127,20 +112,11 @@ const Categories = () => {
     );
   }
 
-  // Slice categories to show only the visible ones
   const visibleCategories = categories.slice(0, visibleCategoriesCount);
-  console.log('Visible Categories:', visibleCategories);
-  console.log('Total Categories Length:', categories.length);
-  console.log('Visible Categories Count:', visibleCategoriesCount);
-  console.log('Should Show More Button Be Visible?', visibleCategoriesCount < categories.length);
-
-  
-  
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: COLORS.background }}>
       <main className="container mx-auto py-12 px-6">
-        {/* Header Section */}
         <div className="text-center mb-12">
           <h1 className="text-3xl font-bold mb-2" style={{ color: COLORS.primary }}>
             Browse fundraisers by category
@@ -151,16 +127,12 @@ const Categories = () => {
           <button 
             onClick={handleStartCampaign}
             className="px-6 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity"
-            style={{ 
-              backgroundColor: COLORS.primary, 
-              color: COLORS.textLight 
-            }}
+            style={{ backgroundColor: COLORS.primary, color: COLORS.textLight }}
           >
             Start New Campain
           </button>
         </div>
 
-        {/* Category Grid Section */}
         <div className="mb-12 mt-8">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 px-6">
             {categories.map((category) => (
@@ -170,19 +142,16 @@ const Categories = () => {
                   showCategories ? 'opacity-100' : 'opacity-0'
                 }`}
               >
-                {/* Image Container */}
                 <div className="mb-2">
                   <img
                     src={`${BASE_URL}${category.image}`}
                     alt={category.name}
                     className="w-12 h-12 object-cover"
                     onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/48'; // Fallback image if loading fails
+                      e.target.src = 'https://via.placeholder.com/48';
                     }}
                   />
                 </div>
-                
-                {/* Category Name */}
                 <p className="text-sm text-center" style={{ color: COLORS.textDark }}>
                   {category.name}
                 </p>
@@ -191,10 +160,8 @@ const Categories = () => {
           </div>
         </div>
 
-        {/* Separator Line */}
         <hr className="my-8 border-t-2" style={{ borderColor: COLORS.secondary }} />
 
-        {/* Categories and Projects Section */}
         {visibleCategories.length === 0 ? (
           <p className="text-center" style={{ color: COLORS.textDark }}>
             No categories available.
@@ -202,24 +169,18 @@ const Categories = () => {
         ) : (
           visibleCategories.map((category, index) => {
             const categoryProjects = getProjectsByCategory(category.id);
-            if (categoryProjects.length === 0) {
-              console.log(`No projects found for category ${category.name}`);
-              return null;
-            }
+            if (categoryProjects.length === 0) return null;
 
             return (
               <div key={category.id}>
                 <div className="mb-12">
-                  {/* Category Title */}
                   <h2 className="text-2xl font-semibold mb-6" style={{ color: COLORS.textDark }}>
                     {category.name} Fundraisers
                   </h2>
 
-                  {/* Projects Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     {categoryProjects.map((project) => (
                       <div key={project.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
-                        {/* Project Image with Owner Overlay */}
                         <div className="relative">
                           <img
                             src={
@@ -230,23 +191,16 @@ const Categories = () => {
                             alt={project.title}
                             className="w-full h-48 object-cover rounded-t-lg"
                           />
-                          {/* Owner Name Overlay */}
                           <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white text-sm px-2 py-1 rounded">
                             {project.owner}
                           </div>
                         </div>
 
-                        {/* Project Details */}
                         <div className="p-4">
-                          {/* Title */}
                           <h3 className="text-lg font-medium mb-2" style={{ color: COLORS.textDark }}>
                             {project.title}
                           </h3>
-
-                          {/* Description */}
                           <p className="text-sm text-gray-600 mb-3">{project.details}</p>
-
-                          {/* Progress Bar */}
                           <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
                             <div
                               className="h-2 rounded-full"
@@ -259,8 +213,6 @@ const Categories = () => {
                               }}
                             ></div>
                           </div>
-
-                          {/* Amount Raised */}
                           <p className="text-sm" style={{ color: COLORS.textDark }}>
                             ${project.total_donations.toLocaleString()} raised
                           </p>
@@ -269,7 +221,6 @@ const Categories = () => {
                     ))}
                   </div>
 
-                  {/* See More Link */}
                   <div className="text-right mt-6">
                     <a 
                       href="#" 
@@ -282,7 +233,6 @@ const Categories = () => {
                   </div>
                 </div>
 
-                {/* Separator Line Between Categories (except for the last one) */}
                 {index < visibleCategories.length - 1 && (
                   <hr className="my-8 border-t-2" style={{ borderColor: COLORS.secondary }} />
                 )}
@@ -291,16 +241,12 @@ const Categories = () => {
           })
         )}
 
-        {/* Show More Categories Button */}
         {visibleCategoriesCount < categories.length && (
           <div className="text-center mt-8">
             <button
               onClick={handleShowMoreCategories}
               className="px-6 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity"
-              style={{ 
-                backgroundColor: COLORS.primary, 
-                color: COLORS.textLight 
-              }}
+              style={{ backgroundColor: COLORS.primary, color: COLORS.textLight }}
             >
               Show More Categories
             </button>
