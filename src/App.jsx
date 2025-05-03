@@ -18,6 +18,7 @@ import Projects from './pages/Home/Projects';
 import Footer from './components/Footer';
 import DonationPage from './pages/Home/DonationPage';
 import Categories from './pages/Categories/Categories.jsx'
+import CategoryCampaigns from './pages/Categories/CategoryCampaigns.jsx';
 
 function App() {
   return (
@@ -33,13 +34,14 @@ function App() {
             <Route path="/activate/:uidb64/:token" element={<Activate />} />
             <Route path="/campains" element={<Projects />} />
             <Route path="/projects/:id" element={<ProjectDetails />} />
-            <Route path="/create-project" element={<CreateProject />} />
+            <Route path="/create-campaign" element={<CreateProject />} />
             <Route path="/projects/:id/update" element={<ProjectUpdate />} />
             <Route path="/projects/:id/donate" element={<DonationPage />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/home" element={<Home />} />
             <Route path="/" element={<Home />} /> {/* Changed from Login to Home */}
             <Route path="/categories" element={<Categories />} />
+            <Route path="/categories/:id" element={<CategoryCampaigns />} />
           </Routes>
         </main>
         <Footer />

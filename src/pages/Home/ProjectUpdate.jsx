@@ -21,7 +21,6 @@ const ProjectUpdate = () => {
         total_target: '',
         start_time: '',
         end_time: '',
-        is_active: true
     });
 
     const [existingImages, setExistingImages] = useState([]);
@@ -51,7 +50,6 @@ const ProjectUpdate = () => {
                 total_target: project.total_target,
                 start_time: formatDateForInput(project.start_time),
                 end_time: formatDateForInput(project.end_time),
-                is_active: project.is_active
             });
 
             setExistingImages(project.images || []);
@@ -407,16 +405,7 @@ const ProjectUpdate = () => {
                             </div>
                         </div>
 
-                        <label className="flex items-center space-x-2">
-                            <input
-                                type="checkbox"
-                                name="is_active"
-                                checked={formData.is_active}
-                                onChange={handleChange}
-                                className="h-4 w-4 text-[#006A71] rounded focus:ring-[#006A71]"
-                            />
-                            <span className="text-[#1e1e1e]">Active</span>
-                        </label>
+
 
                         <button
                             type="submit"

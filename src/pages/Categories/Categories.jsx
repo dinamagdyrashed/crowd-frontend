@@ -6,6 +6,9 @@ import {
   FaLaptop, FaHeartbeat, FaBook, FaPaintBrush, FaHandsHelping,
   FaArrowRight
 } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaExclamationCircle } from 'react-icons/fa';
+import AuthPopup from '../../components/AuthPopup';
 
 const COLORS = {
   primary: '#006A71',
@@ -20,7 +23,7 @@ const BASE_URL = 'http://localhost:8000';
 
 const Categories = () => {
   const navigate = useNavigate();
-
+  const token = localStorage.getItem('accessToken');
   const [categories, setCategories] = useState([]);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,8 +31,23 @@ const Categories = () => {
   const [visibleCategoriesCount, setVisibleCategoriesCount] = useState(3);
   const [showCategories, setShowCategories] = useState(false);
 
+  const [showPopup, setShowPopup] = useState(false);
+
   const handleStartCampaign = () => {
+    if (token) {
+      navigate("/create-campaign");
+    } else {
+      setShowPopup(true);
+    }
+  };
+
+  const handleConfirm = () => {
+    setShowPopup(false);
     navigate("/register");
+  };
+
+  const handleCancel = () => {
+    setShowPopup(false);
   };
 
   useEffect(() => {
@@ -136,11 +154,11 @@ const Categories = () => {
         <div className="mb-12 mt-8">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 px-6">
             {categories.map((category) => (
-              <div
+              <Link
                 key={category.id}
-                className={`bg-white rounded-lg p-4 flex flex-col items-center justify-center h-32 transition-opacity duration-500 ${
-                  showCategories ? 'opacity-100' : 'opacity-0'
-                }`}
+                to={`/categories/${category.id}`}
+                className={`bg-white rounded-lg p-4 flex flex-col items-center justify-center h-32 transition-opacity duration-500 ${showCategories ? 'opacity-100' : 'opacity-0'
+                  }`}
               >
                 <div className="mb-2">
                   <img
@@ -155,7 +173,7 @@ const Categories = () => {
                 <p className="text-sm text-center" style={{ color: COLORS.textDark }}>
                   {category.name}
                 </p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -256,6 +274,15 @@ const Categories = () => {
             </button>
           </div>
         )}
+
+        <AnimatePresence>
+          {showPopup && (
+            <AuthPopup
+              onConfirm={handleConfirm}
+              onCancel={handleCancel}
+            />
+          )}
+        </AnimatePresence>
       </main>
     </div>
   );

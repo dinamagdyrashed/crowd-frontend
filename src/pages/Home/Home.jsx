@@ -6,15 +6,14 @@ import { debounce } from "lodash";
 import { motion } from "framer-motion";
 import ProjectCard from "../../components/ProjectCard";
 import SectionHeader from "../../components/SectionHeader";
+import HeroSection from "../../components/HeroSection";
+
 const Home = () => {
     const [topRatedProjects, setTopRatedProjects] = useState([]);
     const [latestProjects, setLatestProjects] = useState([]);
     const [featuredProjects, setFeaturedProjects] = useState([]);
-    const [categoryProjects, setCategoryProjects] = useState([]);
     const [searchResults, setSearchResults] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
-    const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
 
     const colors = {
@@ -24,6 +23,28 @@ const Home = () => {
         background: "#F2EFE7",
         textDark: "#1e1e1e",
         textLight: "#ffffff"
+    };
+
+    // Slider settings
+    const sliderSettings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 5000,
+        pauseOnHover: true,
+        arrows: true,
+        cssEase: "cubic-bezier(0.645, 0.045, 0.355, 1)",
+        appendDots: dots => (
+            <div className="bg-transparent rounded-lg p-4">
+                <ul className="m-0 mt-10"> {dots} </ul>
+            </div>
+        ),
+        customPaging: i => (
+            <div className="w-3 h-3 mt-3 rounded-full bg-gray-300 hover:bg-primary transition-colors"></div>
+        )
     };
 
     const getFirstImageUrl = (images) => {
@@ -48,8 +69,17 @@ const Home = () => {
 
     const handleSearchInputChange = (e) => {
         const query = e.target.value;
-        setSearchQuery(e.target.value);
-        debouncedSearch(searchQuery);
+        setSearchQuery(query);
+        debouncedSearch(query);
+    };
+
+    const handleClearSearch = () => {
+        setSearchQuery("");
+        setSearchResults([]);
+    };
+
+    const handleDonateNow = (projectId) => {
+        navigate(`/projects/${projectId}/donate`);
     };
 
     useEffect(() => {
@@ -65,116 +95,21 @@ const Home = () => {
             .then((res) => setFeaturedProjects(res.data))
             .catch((err) => console.error("Error fetching featured projects", err));
 
-        axios.get("http://127.0.0.1:8000/api/projects/categories/")
-            .then((res) => {
-                const categoryNames = res.data.map(category => category.name);
-                setCategories(categoryNames);
-            })
-            .catch((err) => console.error("Error fetching categories", err));
-
         return () => {
             debouncedSearch.cancel();
         };
     }, [debouncedSearch]);
 
-    const fetchProjectsByCategory = (category) => {
-        setSelectedCategory(category);
-        axios.get(`http://127.0.0.1:8000/api/projects/projects/?category=${category}`)
-            .then((res) => setCategoryProjects(res.data))
-            .catch((err) => console.error(`Error fetching projects for category ${category}`, err));
-    };
-
-    const handleDonateNow = (projectId) => {
-        navigate(`/projects/${projectId}/donate`);
-    };
-
-    const sliderSettings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 5000,
-        pauseOnHover: true,
-        arrows: true,
-        cssEase: "cubic-bezier(0.645, 0.045, 0.355, 1)",
-        appendDots: dots => (
-            <div className="bg-transparent rounded-lg p-4">
-                <ul className="m-0 mt-10"> {dots} </ul>
-            </div>
-        ),
-        customPaging: i => (
-            <div className="w-3 h-3 mt-3 rounded-full bg-gray-300 hover:bg-primary transition-colors"></div>
-        )
-    };
-
-
-
-    const HeroSection = () => (
-        <section
-            className="mb-12 text-center py-12 px-4 rounded-xl"
-            style={{ backgroundColor: colors.accent }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-        >
-            <h1
-                className="text-3xl md:text-4xl font-bold mb-4"
-                style={{ color: colors.textDark }}
-                initial={{ y: -20 }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.5 }}
-            >
-                Support Causes That Matter
-            </h1>
-            <p
-                className="text-lg max-w-2xl mx-auto mb-6"
-                style={{ color: colors.textDark }}
-                initial={{ y: 20 }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.5 }}
-            >
-                Discover and donate to projects making a difference in communities worldwide.
-            </p>
-
-            {/* Search Bar */}
-            <div
-                className="max-w-xl mx-auto"
-            >
-                <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={handleSearchInputChange}
-                    placeholder="Search for projects..."
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    style={{ backgroundColor: colors.background }}
-                />
-            </div>
-        </section>
-    );
-
-
     return (
         <div className="w-full max-w-7xl mx-auto px-4 py-8" style={{ backgroundColor: colors.background }}>
-            <HeroSection />
+            <HeroSection
+                colors={colors}
+                searchQuery={searchQuery}
+                handleSearchInputChange={handleSearchInputChange}
+                searchResults={searchResults}
+                onClearSearch={handleClearSearch}
+            />
 
-            {/* Search Results */}
-            {searchResults.length > 0 && (
-                <motion.section
-                    className="mb-12"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <SectionHeader title="Search Results" link="/projects" />
-                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        {searchResults.map((project) => (
-                            <ProjectCard key={project.id} project={project} />
-                        ))}
-                    </div>
-                </motion.section>
-            )}
 
             {/* Top Rated Projects Slider */}
             <motion.section
@@ -216,13 +151,13 @@ const Home = () => {
                                                     style={{ backgroundColor: colors.accent, color: colors.textDark }}>
                                                     {project.category?.name || "Uncategorized"}
                                                 </span>
-                                                {project.status == "active" ? (
+                                                {project.status === "active" ? (
                                                     <span className="text-xs font-semibold px-2 py-1 rounded-full bg-green-100 text-green-800">
                                                         Active
                                                     </span>
                                                 ) : (
                                                     <span className="text-xs font-semibold px-2 py-1 rounded-full bg-red-100 text-red-800">
-                                                        project.status
+                                                        {project.status || "Inactive"}
                                                     </span>
                                                 )}
                                             </div>
@@ -328,63 +263,6 @@ const Home = () => {
                 </div>
             </motion.section>
 
-            {/* Categories */}
-            <motion.section
-                className="mb-12"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-            >
-                <h2 className="text-2xl font-bold mb-6" style={{ color: colors.textDark }}>
-                    Browse by Category
-                </h2>
-                <div className="flex flex-wrap gap-2 mb-8">
-                    {categories.map((category) => (
-                        <motion.button
-                            key={category}
-                            onClick={() => fetchProjectsByCategory(category)}
-                            className={`px-4 py-2 rounded-full text-sm font-medium ${selectedCategory === category
-                                ? 'text-white'
-                                : 'text-gray-800 hover:bg-gray-200'
-                                } transition-colors`}
-                            style={{
-                                backgroundColor: selectedCategory === category ? colors.primary : colors.background
-                            }}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            {category}
-                        </motion.button>
-                    ))}
-                </div>
-
-                {selectedCategory && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-xl font-semibold" style={{ color: colors.textDark }}>
-                                {selectedCategory} Projects
-                            </h3>
-                            <motion.button
-                                onClick={() => setSelectedCategory("")}
-                                className="hover:underline font-medium"
-                                style={{ color: colors.primary }}
-                                whileHover={{ scale: 1.05 }}
-                            >
-                                Clear filter
-                            </motion.button>
-                        </div>
-                        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                            {categoryProjects.map((project) => (
-                                <ProjectCard key={project.id} project={project} />
-                            ))}
-                        </div>
-                    </motion.div>
-                )}
-            </motion.section>
         </div>
     );
 };

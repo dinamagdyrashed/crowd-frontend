@@ -46,13 +46,7 @@ const Navbar = () => {
 
         {/* Left side - hidden on mobile */}
         <div className="hidden md:flex items-center space-x-4">
-          <NavLink
-            to="/search"
-            className="flex items-center gap-1 hover:text-[#006A71]"
-          >
-            <FaSearch className="text-sm" />
-            <span>Search</span>
-          </NavLink>
+
           <NavLink to="/home" className="hover:text-[#006A71]">
             Home
           </NavLink>
@@ -60,10 +54,10 @@ const Navbar = () => {
             Campains
           </NavLink>
           <NavLink to="/categories" className="hover:text-[#006A71]">
-          Categories
+            Categories
           </NavLink>
           <NavLink to="/" className="hover:text-[#006A71]">
-          Finished Projects
+            Finished Projects
           </NavLink>
         </div>
 
