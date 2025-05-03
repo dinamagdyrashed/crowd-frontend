@@ -216,10 +216,15 @@ const Home = () => {
                                                     style={{ backgroundColor: colors.accent, color: colors.textDark }}>
                                                     {project.category?.name || "Uncategorized"}
                                                 </span>
-                                                <span className={`text-xs font-semibold px-2 py-1 rounded-full ${project.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                                                    }`}>
-                                                    {project.is_active ? 'Active' : 'Ended'}
-                                                </span>
+                                                {project.status == "active" ? (
+                                                    <span className="text-xs font-semibold px-2 py-1 rounded-full bg-green-100 text-green-800">
+                                                        Active
+                                                    </span>
+                                                ) : (
+                                                    <span className="text-xs font-semibold px-2 py-1 rounded-full bg-red-100 text-red-800">
+                                                        project.status
+                                                    </span>
+                                                )}
                                             </div>
 
                                             {/* Title */}
