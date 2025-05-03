@@ -56,8 +56,8 @@ const Navbar = () => {
           <NavLink to="/home" className="hover:text-[#006A71]">
             Home
           </NavLink>
-          <NavLink to="/projects" className="hover:text-[#006A71]">
-            Projects
+          <NavLink to="/campains" className="hover:text-[#006A71]">
+            Campains
           </NavLink>
         </div>
 
@@ -67,7 +67,7 @@ const Navbar = () => {
           className="text-xl font-bold tracking-wide mx-auto md:mx-0"
           style={{ color: '#006A71' }}
         >
-          Crowd<span style={{ color: '#48A6A7' }}>Funding</span>
+          Athr<span style={{ color: '#48A6A7' }}></span>
         </NavLink>
 
         {/* Right side - hidden on mobile */}
@@ -108,7 +108,7 @@ const Navbar = () => {
                   e.target.style.color = '#006A71';
                 }}
               >
-                Start a GoFundMe
+                Sign Up
               </NavLink>
             </>
           )}

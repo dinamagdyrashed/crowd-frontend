@@ -71,7 +71,7 @@ const ProjectCard = ({ project }) => {
                         style={{ backgroundColor: colors.accent, color: colors.textDark }}>
                         {project.category?.name || "Uncategorized"}
                     </span>
-                    {project.is_active ? (
+                    {project.status == "active" ? (
                         <span className="text-xs font-semibold px-2 py-1 rounded-full bg-green-100 text-green-800">
                             Active
                         </span>

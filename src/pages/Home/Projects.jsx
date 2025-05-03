@@ -85,14 +85,14 @@ const Projects = () => {
     <div className="min-h-screen bg-[#F2EFE7] py-8 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <h1 className="text-3xl font-bold text-[#006A71]">Explore Projects</h1>
+          <h1 className="text-3xl font-bold text-[#006A71]">Explore Campains</h1>
 
           <button
             onClick={() => navigate('/create-project')}
             className="flex items-center gap-2 bg-[#006A71] hover:bg-[#04828c] text-white px-6 py-3 rounded-lg transition duration-200 shadow-md"
           >
             <FaPlus />
-            Create Project
+            Create Campain
           </button>
         </div>
 
