@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { useEffect, useState } from 'react';
 import defaultProfilePic from '../../assets/default-profile-pic.png';
-import { FaGoogle, FaFacebookF, FaCamera, FaUser, FaEnvelope, FaLock, FaPhone, FaCalendarAlt, FaGlobe } from 'react-icons/fa';
+import { FaCamera, FaUser, FaEnvelope, FaLock, FaPhone, FaCalendarAlt, FaGlobe, FaFacebookF } from 'react-icons/fa';
 
 const checkEmailExists = async (email) => {
   try {
@@ -129,7 +129,7 @@ const Register = () => {
           <h2 className="text-xl sm:text-2xl font-bold text-[#006A71] text-center mb-6">Create account</h2>
 
           {/* Social Login Buttons */}
-          <div className="flex justify-center gap-4 mb-6">
+          <div className="flex flex-col items-center gap-4 mb-6">
             <button
               type="button"
               onClick={() => {
@@ -149,9 +149,10 @@ const Register = () => {
                   }
                 }, { scope: 'public_profile,email' });
               }}
-              className="p-2 border border-[#48A6A7] rounded-full hover:bg-[#48A6A7] hover:text-white transition duration-300"
+              className="p-1 max-w-xs h-10 border border-[#48A6A7] rounded-lg hover:bg-[#48A6A7] hover:text-white transition duration-300 text-[#006A71] font-semibold text-sm sm:text-base flex items-center justify-center gap-2"
             >
-              <FaFacebookF className="text-[#006A71] hover:text-white w-5 h-5" />
+              <FaFacebookF className="w-5 h-5 text-[#006A71] hover:text-white" />
+              Continue with Facebook
             </button>
             <GoogleOAuthProvider clientId="75773251008-89sei1vuligu58shbmup4f5ttqq097o5.apps.googleusercontent.com">
               <GoogleLogin
@@ -211,20 +212,28 @@ const Register = () => {
                 render={(renderProps) => (
                   <button
                     type="button"
-                    className="p-2 border border-[#48A6A7] rounded-full hover:bg-[#48A6A7] hover:text-white transition duration-300 relative"
+                    className="p-1 max-w-xs h-10 border border-[#48A6A7] rounded-lg hover:bg-[#48A6A7] hover:text-white transition duration-300 text-[#006A71] font-semibold text-sm sm:text-base flex items-center justify-center gap-2"
                     onClick={renderProps.onClick}
                     disabled={renderProps.disabled}
-                    style={{ width: '40px', height: '40px' }}
                   >
-                    <style jsx>{`
-                      button > div > div > div {
-                        display: none !important;
-                      }
-                      button > div {
-                        display: none !important;
-                      }
-                    `}</style>
-                    <FaGoogle className="text-[#006A71] hover:text-white w-5 h-5 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+                    <svg
+                      className="w-5 h-5 text-[#006A71] hover:text-white"
+                      viewBox="0 0 24 24"
+                    >
+                      <text
+                        x="50%"
+                        y="65%"
+                        dominantBaseline="middle"
+                        textAnchor="middle"
+                        fill="currentColor"
+                        fontSize="16"
+                        fontWeight="bold"
+                        fontFamily="Arial, sans-serif"
+                      >
+                        G
+                      </text>
+                    </svg>
+                    Continue with Google
                   </button>
                 )}
               />
