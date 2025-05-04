@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, memo } from 'react';
+import React, { useState, useEffect, useMemo, memo, useRef } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import Slider from "react-slick";
@@ -64,6 +64,7 @@ const ProjectDetails = () => {
     const [loading, setLoading] = useState(true);
     const [userRating, setUserRating] = useState(0);
     const [previousRating, setPreviousRating] = useState(null);
+    const [ratingLoading, setRatingLoading] = useState(true);
     const [averageRating, setAverageRating] = useState(0);
     const [error, setError] = useState(null);
     const [showReportModal, setShowReportModal] = useState(false);
@@ -71,7 +72,7 @@ const ProjectDetails = () => {
     const [reportType, setReportType] = useState('project');
     const [reportTargetId, setReportTargetId] = useState(null);
     const [reportedBy, setReportedBy] = useState(null);
-    const [showShareModal, setShowShareModal] = useState(false);
+    const [showShareDropdown, setShowShareDropdown] = useState(false);
 
     const [comments, setComments] = useState([]);
     const [newCommentText, setNewCommentText] = useState('');
@@ -83,6 +84,8 @@ const ProjectDetails = () => {
     const [similarProjects, setSimilarProjects] = useState([]);
     const [similarLoading, setSimilarLoading] = useState(false);
     const [similarError, setSimilarError] = useState(null);
+
+    const shareButtonRef = useRef(null);
 
     const sliderSettings = {
         dots: true,
@@ -108,13 +111,18 @@ const ProjectDetails = () => {
     };
 
     const fetchUserRating = async () => {
+        setRatingLoading(true);
         try {
+            const token = localStorage.getItem('accessToken');
+            if (!token) {
+                throw new Error('No access token');
+            }
             const response = await axios.get(`http://localhost:8000/api/projects/ratings/user/${id}/`, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                    Authorization: `Bearer ${token}`,
                 },
             });
-            if (response.data.value) {
+            if (response.data.value !== undefined) {
                 setPreviousRating(response.data.value);
                 setUserRating(response.data.value);
             }
@@ -122,6 +130,10 @@ const ProjectDetails = () => {
             if (err.response?.status !== 404) {
                 Alert.error('Error!', 'Failed to fetch your rating.');
             }
+            setPreviousRating(null);
+            setUserRating(0);
+        } finally {
+            setRatingLoading(false);
         }
     };
 
@@ -133,7 +145,7 @@ const ProjectDetails = () => {
             setSimilarProjects(response.data);
         } catch (err) {
             setSimilarError('Failed to load similar Campaigns.');
-            Alert.error('Error!', err.response.data.detail);
+            Alert.error('Error!', err.response?.data?.detail || 'Failed to load similar campaigns.');
         } finally {
             setSimilarLoading(false);
         }
@@ -147,7 +159,7 @@ const ProjectDetails = () => {
             setComments(response.data);
         } catch (err) {
             setCommentsError('Failed to load comments.');
-            Alert.error('Error!', err.response.data.detail);
+            Alert.error('Error!', err.response?.data?.detail || 'Failed to load comments.');
         } finally {
             setCommentsLoading(false);
         }
@@ -161,6 +173,36 @@ const ProjectDetails = () => {
             fetchComments();
         }
     }, [id]);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (shareButtonRef.current && !shareButtonRef.current.contains(event.target)) {
+                setShowShareDropdown(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const handleRatingSubmit = async () => {
+        try {
+            await axios.post(`http://localhost:8000/api/projects/ratings/`, {
+                project: project.id,
+                value: userRating,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                },
+            });
+            Alert.success('Rating submitted!', 'Thank you for your feedback.');
+            setPreviousRating(userRating);
+            await fetchUserRating();
+        } catch (err) {
+            Alert.error('Error!', err.response?.data?.detail || 'Failed to submit rating.');
+        }
+    };
 
     const postComment = async (parentId = null) => {
         if ((parentId === null && !newCommentText.trim()) || (parentId !== null && !replyText.trim())) {
@@ -229,42 +271,28 @@ const ProjectDetails = () => {
     };
 
     const handleShare = () => {
-        const shareUrl = `${window.location.origin}/projects/${id}`;
-        const shareText = `Check out this campaign: ${project?.title || 'A great project'}`;
-
-        if (navigator.share) {
-            navigator.share({
-                title: project?.title || 'Campaign',
-                text: shareText,
-                url: shareUrl,
-            }).catch((err) => {
-                console.error('Error sharing:', err);
-                setShowShareModal(true);
-            });
-        } else {
-            setShowShareModal(true);
-        }
+        setShowShareDropdown(!showShareDropdown);
     };
 
     const shareLinks = project ? [
         {
             platform: 'Facebook',
-            icon: <FaFacebook size={24} />,
+            icon: <FaFacebook size={20} />,
             url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${window.location.origin}/projects/${id}`)}`,
         },
         {
             platform: 'WhatsApp',
-            icon: <FaWhatsapp size={24} />,
+            icon: <FaWhatsapp size={20} />,
             url: `https://api.whatsapp.com/send?text=${encodeURIComponent(`Check out this campaign: ${project.title} ${window.location.origin}/projects/${id}`)}`,
         },
         {
             platform: 'Twitter',
-            icon: <FaTwitter size={24} />,
+            icon: <FaTwitter size={20} />,
             url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out this campaign: ${project.title}`)}&url=${encodeURIComponent(`${window.location.origin}/projects/${id}`)}`,
         },
         {
             platform: 'LinkedIn',
-            icon: <FaLinkedin size={24} />,
+            icon: <FaLinkedin size={20} />,
             url: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(`${window.location.origin}/projects/${id}`)}&title=${encodeURIComponent(project.title)}&summary=${encodeURIComponent(project.details.substring(0, 200))}`,
         },
     ] : [];
@@ -323,25 +351,6 @@ const ProjectDetails = () => {
         ));
     };
 
-    const handleRatingSubmit = async () => {
-        try {
-            await axios.post(`http://localhost:8000/api/projects/ratings/`, {
-                project: project.id,
-                value: userRating,
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-                }
-            });
-            Alert.success('Rating submitted!', 'Thank you for your feedback.');
-            setPreviousRating(userRating);
-            await fetchProjectDetails();
-            setUserRating(userRating);
-        } catch (err) {
-            Alert.error('Error!', err.response.data.detail);
-        }
-    };
-
     const handleCancelProject = async () => {
         const result = await Alert.confirm(
             'Are you sure?',
@@ -353,13 +362,13 @@ const ProjectDetails = () => {
             try {
                 await axios.post(`http://127.0.0.1:8000/api/projects/projects/${id}/cancel/`, {}, {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-                    }
+                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                    },
                 });
                 Alert.success('Cancelled!', 'Your Campaign has been cancelled.');
                 navigate('/home');
             } catch (err) {
-                Alert.error('Error!', err.response.data.detail);
+                Alert.error('Error!', err.response?.data?.detail || 'Failed to cancel campaign.');
             }
         }
     };
@@ -471,23 +480,43 @@ const ProjectDetails = () => {
                             <h2 className="text-xl font-bold text-[#006A71]">Rate this Campaign</h2>
                             <span className="text-[#1e1e1e]">Average: {averageRating || 'No ratings yet'}</span>
                         </div>
-                        <div className="flex items-center space-x-2 mb-3">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                                <button
-                                    key={star}
-                                    className={`text-3xl ${previousRating ? (star <= previousRating ? 'text-yellow-500' : 'text-gray-300') : (userRating >= star ? 'text-yellow-500' : 'text-gray-300')}`}
-                                    onClick={previousRating ? undefined : () => setUserRating(star)}
-                                    disabled={!!previousRating}
-                                    aria-label={`Rate ${star} star`}
-                                >
-                                    ★
-                                </button>
-                            ))}
-                        </div>
-                        {!previousRating && (
+                        {ratingLoading ? (
+                            <div className="flex justify-center">
+                                <FaSpinner className="animate-spin text-[#006A71] text-2xl" />
+                            </div>
+                        ) : (
+                            <div className="flex items-center space-x-2 mb-3">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                    <span
+                                        key={star}
+                                        className={`text-3xl ${
+                                            previousRating !== null
+                                                ? star <= previousRating
+                                                    ? 'text-amber-500'
+                                                    : 'text-gray-300'
+                                                : star <= userRating
+                                                ? 'text-amber-500'
+                                                : 'text-gray-300'
+                                        } ${previousRating !== null ? 'cursor-default' : 'cursor-pointer'}`}
+                                        onClick={previousRating !== null ? undefined : () => setUserRating(star)}
+                                        aria-label={`Rate ${star} star`}
+                                    >
+                                        ★
+                                    </span>
+                                ))}
+                                {previousRating !== null && (
+                                    <span className="text-[#006A71] text-lg font-semibold">
+                                        {previousRating}
+                                    </span>
+                                )}
+                            </div>
+                        )}
+                        {previousRating === null && !ratingLoading && (
                             <button
                                 onClick={handleRatingSubmit}
-                                className={`w-full p-2 rounded-lg ${!userRating ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#48A6A7] hover:bg-[#006A71] text-white'} transition duration-200`}
+                                className={`w-full p-2 rounded-lg ${
+                                    !userRating ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#48A6A7] hover:bg-[#006A71] text-white'
+                                } transition duration-200`}
                                 disabled={!userRating}
                             >
                                 Submit Rating
@@ -535,12 +564,14 @@ const ProjectDetails = () => {
                         )}
                     </div>
 
-                    <div className="flex flex-wrap justify-center gap-4 mb-8">
+                    <div className="flex flex-wrap justify-center gap-4 mb-8 relative">
                         <button
                             onClick={() => navigate(`/projects/${id}/donate`)}
-                            className={`flex items-center px-6 py-3 rounded-lg ${project.total_donations >= project.total_target
-                                ? 'bg-gray-400 cursor-not-allowed'
-                                : 'bg-[#48A6A7] hover:bg-[#006A71] text-white'} transition duration-200`}
+                            className={`flex items-center px-6 py-3 rounded-lg ${
+                                project.total_donations >= project.total_target
+                                    ? 'bg-gray-400 cursor-not-allowed'
+                                    : 'bg-[#48A6A7] hover:bg-[#006A71] text-white'
+                            } transition duration-200`}
                             disabled={project.total_donations >= project.total_target}
                         >
                             <FaDonate className="mr-2" />
@@ -571,13 +602,43 @@ const ProjectDetails = () => {
                             Report Campaign
                         </button>
 
-                        <button
-                            onClick={handleShare}
-                            className="flex items-center px-6 py-3 rounded-lg bg-[#006A71] hover:bg-[#48A6A7] text-white transition duration-200"
-                        >
-                            <FaShareAlt className="mr-2" />
-                            Share
-                        </button>
+                        <div ref={shareButtonRef} className="relative">
+                            <button
+                                onClick={handleShare}
+                                className="flex items-center px-6 py-3 rounded-lg bg-[#006A71] hover:bg-[#48A6A7] text-white transition duration-200"
+                            >
+                                <FaShareAlt className="mr-2" />
+                                Share
+                            </button>
+                            <AnimatePresence>
+                                {showShareDropdown && (
+                                    <motion.div
+                                        className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-[#9ACBD0] z-50"
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.95 }}
+                                        transition={{ duration: 0.2 }}
+                                    >
+                                        <div className="py-2">
+                                            {shareLinks.map(({ platform, icon, url }) => (
+                                                <a
+                                                    key={platform}
+                                                    href={url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex items-center px-4 py-2 text-[#006A71] hover:bg-[#F2EFE7] transition duration-200"
+                                                    onClick={() => setShowShareDropdown(false)}
+                                                    aria-label={`Share on ${platform}`}
+                                                >
+                                                    <span className="mr-2">{icon}</span>
+                                                    {platform}
+                                                </a>
+                                            ))}
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
                     </div>
 
                     <div className="border-t border-[#9ACBD0] pt-6">
@@ -623,7 +684,7 @@ const ProjectDetails = () => {
                 </div>
 
                 {showReportModal && (
-                    <div className="fixed inset-0 bg-gray-800 bg-opacity-40 backdrop-blur-sm flex justify-center items-center z-50">
+                    <div className="fixed inset-0 bg-gray-800 bg-opacity-40 backdrop-blur-md flex justify-center items-center z-50">
                         <motion.div
                             className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md border border-[#9ACBD0]"
                             initial={{ opacity: 0, scale: 0.9 }}
@@ -655,58 +716,13 @@ const ProjectDetails = () => {
                                     Cancel
                                 </button>
                                 <button
-                                    className={`px-4 py-2 rounded-lg text-white ${!reportReason.trim()
-                                        ? 'bg-gray-400 cursor-not-allowed'
-                                        : 'bg-red-500 hover:bg-red-600'} transition duration-200`}
+                                    className={`px-4 py-2 rounded-lg text-white ${
+                                        !reportReason.trim() ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-500 hover:bg-red-600'
+                                    } transition duration-200`}
                                     onClick={submitReport}
                                     disabled={!reportReason.trim()}
                                 >
                                     Submit Report
-                                </button>
-                            </div>
-                        </motion.div>
-                    </div>
-                )}
-
-                {showShareModal && (
-                    <div className="fixed inset-0 bg-gray-800 bg-opacity-40 backdrop-blur-sm flex justify-center items-center z-50">
-                        <motion.div
-                            className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md border border-[#9ACBD0]"
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            transition={{ duration: 0.2 }}
-                        >
-                            <h2 className="text-xl font-bold mb-4 text-[#006A71] flex items-center">
-                                <FaShareAlt className="mr-2" />
-                                Share this Campaign
-                            </h2>
-
-                            <p className="mb-4 text-[#1e1e1e]">
-                                Spread the word about this campaign on your favorite platforms!
-                            </p>
-
-                            <div className="flex justify-around mb-4">
-                                {shareLinks.map(({ platform, icon, url }) => (
-                                    <a
-                                        key={platform}
-                                        href={url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-[#006A71] hover:text-[#48A6A7] transition duration-200"
-                                        aria-label={`Share on ${platform}`}
-                                    >
-                                        {icon}
-                                    </a>
-                                ))}
-                            </div>
-
-                            <div className="flex justify-end">
-                                <button
-                                    className="px-4 py-2 rounded-lg border border-[#9ACBD0] text-[#1e1e1e] hover:bg-[#F2EFE7] transition duration-200"
-                                    onClick={() => setShowShareModal(false)}
-                                >
-                                    Close
                                 </button>
                             </div>
                         </motion.div>
@@ -733,7 +749,7 @@ const ProjectDetails = () => {
                                 return (
                                     <Link
                                         key={similar.id}
-                                        to={`/projects/${PROJECTS}/${similar.id}`}
+                                        to={`/projects/${similar.id}`}
                                         className="border border-[#9ACBD0] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition duration-200"
                                     >
                                         {imageUrl ? (
