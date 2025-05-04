@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import Slider from "react-slick";
 import Alert from '../../alert/Alert';
-import { FaExclamationCircle, FaSpinner, FaFlag, FaComment, FaDonate, FaEdit, FaTimes } from 'react-icons/fa';
+import { FaExclamationCircle, FaSpinner, FaFlag, FaComment, FaDonate, FaEdit, FaTimes, FaShareAlt, FaFacebook, FaWhatsapp, FaTwitter, FaLinkedin } from 'react-icons/fa';
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -63,6 +63,7 @@ const ProjectDetails = () => {
     const [project, setProject] = useState(null);
     const [loading, setLoading] = useState(true);
     const [userRating, setUserRating] = useState(0);
+    const [previousRating, setPreviousRating] = useState(null);
     const [averageRating, setAverageRating] = useState(0);
     const [error, setError] = useState(null);
     const [showReportModal, setShowReportModal] = useState(false);
@@ -70,6 +71,7 @@ const ProjectDetails = () => {
     const [reportType, setReportType] = useState('project');
     const [reportTargetId, setReportTargetId] = useState(null);
     const [reportedBy, setReportedBy] = useState(null);
+    const [showShareModal, setShowShareModal] = useState(false);
 
     const [comments, setComments] = useState([]);
     const [newCommentText, setNewCommentText] = useState('');
@@ -105,6 +107,24 @@ const ProjectDetails = () => {
         }
     };
 
+    const fetchUserRating = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/projects/ratings/user/${id}/`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                },
+            });
+            if (response.data.value) {
+                setPreviousRating(response.data.value);
+                setUserRating(response.data.value);
+            }
+        } catch (err) {
+            if (err.response?.status !== 404) {
+                Alert.error('Error!', 'Failed to fetch your rating.');
+            }
+        }
+    };
+
     const fetchSimilarProjects = async () => {
         setSimilarLoading(true);
         setSimilarError(null);
@@ -112,7 +132,7 @@ const ProjectDetails = () => {
             const response = await axios.get(`http://localhost:8000/api/projects/projects/${id}/similar/`);
             setSimilarProjects(response.data);
         } catch (err) {
-            setSimilarError('Failed to load similar projects.');
+            setSimilarError('Failed to load similar Campaigns.');
             Alert.error('Error!', err.response.data.detail);
         } finally {
             setSimilarLoading(false);
@@ -136,6 +156,7 @@ const ProjectDetails = () => {
     useEffect(() => {
         if (id) {
             fetchProjectDetails();
+            fetchUserRating();
             fetchSimilarProjects();
             fetchComments();
         }
@@ -207,6 +228,47 @@ const ProjectDetails = () => {
         }
     };
 
+    const handleShare = () => {
+        const shareUrl = `${window.location.origin}/projects/${id}`;
+        const shareText = `Check out this campaign: ${project?.title || 'A great project'}`;
+
+        if (navigator.share) {
+            navigator.share({
+                title: project?.title || 'Campaign',
+                text: shareText,
+                url: shareUrl,
+            }).catch((err) => {
+                console.error('Error sharing:', err);
+                setShowShareModal(true);
+            });
+        } else {
+            setShowShareModal(true);
+        }
+    };
+
+    const shareLinks = project ? [
+        {
+            platform: 'Facebook',
+            icon: <FaFacebook size={24} />,
+            url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${window.location.origin}/projects/${id}`)}`,
+        },
+        {
+            platform: 'WhatsApp',
+            icon: <FaWhatsapp size={24} />,
+            url: `https://api.whatsapp.com/send?text=${encodeURIComponent(`Check out this campaign: ${project.title} ${window.location.origin}/projects/${id}`)}`,
+        },
+        {
+            platform: 'Twitter',
+            icon: <FaTwitter size={24} />,
+            url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out this campaign: ${project.title}`)}&url=${encodeURIComponent(`${window.location.origin}/projects/${id}`)}`,
+        },
+        {
+            platform: 'LinkedIn',
+            icon: <FaLinkedin size={24} />,
+            url: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(`${window.location.origin}/projects/${id}`)}&title=${encodeURIComponent(project.title)}&summary=${encodeURIComponent(project.details.substring(0, 200))}`,
+        },
+    ] : [];
+
     const renderComments = (commentsList) => {
         return commentsList.map((comment) => (
             <div key={comment.id} className="border border-[#9ACBD0] rounded-lg p-4 mb-3 bg-[#F2EFE7] relative">
@@ -272,8 +334,9 @@ const ProjectDetails = () => {
                 }
             });
             Alert.success('Rating submitted!', 'Thank you for your feedback.');
+            setPreviousRating(userRating);
             await fetchProjectDetails();
-            setUserRating(0);
+            setUserRating(userRating);
         } catch (err) {
             Alert.error('Error!', err.response.data.detail);
         }
@@ -282,7 +345,7 @@ const ProjectDetails = () => {
     const handleCancelProject = async () => {
         const result = await Alert.confirm(
             'Are you sure?',
-            'Do you really want to cancel this project?',
+            'Do you really want to cancel this Campaign?',
             'Yes, cancel it!'
         );
 
@@ -293,7 +356,7 @@ const ProjectDetails = () => {
                         'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
                     }
                 });
-                Alert.success('Cancelled!', 'Your project has been cancelled.');
+                Alert.success('Cancelled!', 'Your Campaign has been cancelled.');
                 navigate('/home');
             } catch (err) {
                 Alert.error('Error!', err.response.data.detail);
@@ -357,7 +420,7 @@ const ProjectDetails = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div className="bg-[#F2EFE7] p-4 rounded-lg border border-[#9ACBD0]">
-                            <h3 className="text-lg font-semibold text-[#006A71] mb-3">Project Details</h3>
+                            <h3 className="text-lg font-semibold text-[#006A71] mb-3">Campaign Details</h3>
                             <div className="space-y-2">
                                 <p className="text-[#1e1e1e]"><span className="font-medium">Category:</span> {project.category.name}</p>
                                 <p className="text-[#1e1e1e]"><span className="font-medium">Target:</span> ${project.total_target}</p>
@@ -405,28 +468,31 @@ const ProjectDetails = () => {
 
                     <div className="mb-6">
                         <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-xl font-bold text-[#006A71]">Rate this Project</h2>
+                            <h2 className="text-xl font-bold text-[#006A71]">Rate this Campaign</h2>
                             <span className="text-[#1e1e1e]">Average: {averageRating || 'No ratings yet'}</span>
                         </div>
                         <div className="flex items-center space-x-2 mb-3">
                             {[1, 2, 3, 4, 5].map((star) => (
                                 <button
                                     key={star}
-                                    className={`text-3xl ${userRating >= star ? 'text-yellow-500' : 'text-gray-300'}`}
-                                    onClick={() => setUserRating(star)}
+                                    className={`text-3xl ${previousRating ? (star <= previousRating ? 'text-yellow-500' : 'text-gray-300') : (userRating >= star ? 'text-yellow-500' : 'text-gray-300')}`}
+                                    onClick={previousRating ? undefined : () => setUserRating(star)}
+                                    disabled={!!previousRating}
                                     aria-label={`Rate ${star} star`}
                                 >
                                     ★
                                 </button>
                             ))}
                         </div>
-                        <button
-                            onClick={handleRatingSubmit}
-                            className={`w-full p-2 rounded-lg ${!userRating ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#48A6A7] hover:bg-[#006A71] text-white'} transition duration-200`}
-                            disabled={!userRating}
-                        >
-                            Submit Rating
-                        </button>
+                        {!previousRating && (
+                            <button
+                                onClick={handleRatingSubmit}
+                                className={`w-full p-2 rounded-lg ${!userRating ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#48A6A7] hover:bg-[#006A71] text-white'} transition duration-200`}
+                                disabled={!userRating}
+                            >
+                                Submit Rating
+                            </button>
+                        )}
                     </div>
 
                     <div className="mb-8">
@@ -464,12 +530,10 @@ const ProjectDetails = () => {
                             </div>
                         ) : (
                             <div className="text-center py-4 bg-[#F2EFE7] rounded-lg border border-[#9ACBD0]">
-                                <p className="text-[#1e1e1e]">No donations yet. Be the first to support this project!</p>
+                                <p className="text-[#1e1e1e]">No donations yet. Be the first to support this Campaign!</p>
                             </div>
                         )}
                     </div>
-
-
 
                     <div className="flex flex-wrap justify-center gap-4 mb-8">
                         <button
@@ -488,7 +552,7 @@ const ProjectDetails = () => {
                             className="flex items-center px-6 py-3 rounded-lg bg-[#9ACBD0] hover:bg-[#48A6A7] text-[#1e1e1e] transition duration-200"
                         >
                             <FaEdit className="mr-2" />
-                            Update Project
+                            Update Campaign
                         </button>
 
                         <button
@@ -496,7 +560,7 @@ const ProjectDetails = () => {
                             className="flex items-center px-6 py-3 rounded-lg bg-red-500 hover:bg-red-600 text-white transition duration-200"
                         >
                             <FaTimes className="mr-2" />
-                            Cancel Project
+                            Cancel Campaign
                         </button>
 
                         <button
@@ -504,7 +568,15 @@ const ProjectDetails = () => {
                             className="flex items-center px-6 py-3 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-white transition duration-200"
                         >
                             <FaFlag className="mr-2" />
-                            Report Project
+                            Report Campaign
+                        </button>
+
+                        <button
+                            onClick={handleShare}
+                            className="flex items-center px-6 py-3 rounded-lg bg-[#006A71] hover:bg-[#48A6A7] text-white transition duration-200"
+                        >
+                            <FaShareAlt className="mr-2" />
+                            Share
                         </button>
                     </div>
 
@@ -525,7 +597,7 @@ const ProjectDetails = () => {
                             <textarea
                                 className="w-full border border-[#9ACBD0] rounded-lg p-3 focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e]"
                                 rows="4"
-                                placeholder="Share your thoughts about this project..."
+                                placeholder="Share your thoughts about this Campaign..."
                                 value={newCommentText}
                                 onChange={(e) => setNewCommentText(e.target.value)}
                             />
@@ -561,7 +633,7 @@ const ProjectDetails = () => {
                         >
                             <h2 className="text-xl font-bold mb-4 text-[#006A71] flex items-center">
                                 <FaFlag className="mr-2" />
-                                Report {reportType === 'project' ? 'Project' : 'Comment'}
+                                Report {reportType === 'project' ? 'Campaign' : 'Comment'}
                             </h2>
 
                             <p className="mb-4 text-[#1e1e1e]">
@@ -595,9 +667,55 @@ const ProjectDetails = () => {
                         </motion.div>
                     </div>
                 )}
+
+                {showShareModal && (
+                    <div className="fixed inset-0 bg-gray-800 bg-opacity-40 backdrop-blur-sm flex justify-center items-center z-50">
+                        <motion.div
+                            className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md border border-[#9ACBD0]"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <h2 className="text-xl font-bold mb-4 text-[#006A71] flex items-center">
+                                <FaShareAlt className="mr-2" />
+                                Share this Campaign
+                            </h2>
+
+                            <p className="mb-4 text-[#1e1e1e]">
+                                Spread the word about this campaign on your favorite platforms!
+                            </p>
+
+                            <div className="flex justify-around mb-4">
+                                {shareLinks.map(({ platform, icon, url }) => (
+                                    <a
+                                        key={platform}
+                                        href={url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-[#006A71] hover:text-[#48A6A7] transition duration-200"
+                                        aria-label={`Share on ${platform}`}
+                                    >
+                                        {icon}
+                                    </a>
+                                ))}
+                            </div>
+
+                            <div className="flex justify-end">
+                                <button
+                                    className="px-4 py-2 rounded-lg border border-[#9ACBD0] text-[#1e1e1e] hover:bg-[#F2EFE7] transition duration-200"
+                                    onClick={() => setShowShareModal(false)}
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+
                 <div className="p-6 sm:p-8">
                     <div className="mb-8">
-                        <h2 className="text-xl font-bold text-[#006A71] mb-4">Similar Projects</h2>
+                        <h2 className="text-xl font-bold text-[#006A71] mb-4">Similar Campaigns</h2>
                         {similarLoading && (
                             <div className="flex justify-center">
                                 <FaSpinner className="animate-spin text-[#006A71] text-2xl" />
@@ -605,7 +723,7 @@ const ProjectDetails = () => {
                         )}
                         {similarError && <p className="text-red-500">{similarError}</p>}
                         {!similarLoading && similarProjects.length === 0 && (
-                            <p className="text-[#1e1e1e]">No similar projects found.</p>
+                            <p className="text-[#1e1e1e]">No similar Campaigns found.</p>
                         )}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             {similarProjects.map(similar => {
@@ -615,7 +733,7 @@ const ProjectDetails = () => {
                                 return (
                                     <Link
                                         key={similar.id}
-                                        to={`/projects/${similar.id}`}
+                                        to={`/projects/${PROJECTS}/${similar.id}`}
                                         className="border border-[#9ACBD0] rounded-lg overflow-hidden shadow-sm hover:shadow-md transition duration-200"
                                     >
                                         {imageUrl ? (

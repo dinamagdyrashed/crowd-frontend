@@ -179,8 +179,8 @@ const ProjectUpdate = () => {
         <div className="flex items-center justify-center min-h-screen bg-[#F2EFE7] p-4">
             <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="w-full bg-[#006A71] p-6 flex flex-col justify-center items-center text-center">
-                    <h1 className="text-2xl sm:text-3xl font-bold text-[#ffffff] mb-2">Update Project</h1>
-                    <p className="text-[#ffffff] text-sm sm:text-base">Edit your project details</p>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-[#ffffff] mb-2">Update Campain</h1>
+                    <p className="text-[#ffffff] text-sm sm:text-base">Edit your Campain details</p>
                 </div>
 
                 <div className="p-6 sm:p-8">
@@ -191,7 +191,7 @@ const ProjectUpdate = () => {
                                 name="title"
                                 value={formData.title}
                                 onChange={handleChange}
-                                placeholder="Project Title"
+                                placeholder="Campain Title"
                                 className="w-full pl-4 pr-4 py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-sm sm:text-base"
                                 required
                                 aria-label="Project Title"
@@ -203,7 +203,7 @@ const ProjectUpdate = () => {
                                 name="details"
                                 value={formData.details}
                                 onChange={handleChange}
-                                placeholder="Project Details"
+                                placeholder="campain Details"
                                 rows="4"
                                 className="w-full pl-4 pr-4 py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-sm sm:text-base"
                                 required
@@ -413,7 +413,7 @@ const ProjectUpdate = () => {
                             className="w-full bg-[#006A71] hover:bg-[#04828c] text-[#ffffff] font-semibold py-2 sm:py-3 rounded-lg transition duration-300 text-sm sm:text-base flex items-center justify-center"
                             aria-label="Update Project"
                         >
-                            {loading ? <FaSpinner className="animate-spin mr-2" /> : 'Update Project'}
+                            {loading ? <FaSpinner className="animate-spin mr-2" /> : 'Update Campain'}
                         </button>
                     </form>
                 </div>

@@ -57,7 +57,7 @@ const Navbar = () => {
             Categories
           </NavLink>
           <NavLink to="/" className="hover:text-[#006A71]">
-            Finished Projects
+            Finished Campains
           </NavLink>
         </div>
 
