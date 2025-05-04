@@ -19,7 +19,7 @@ import Footer from './components/Footer';
 import DonationPage from './pages/Home/DonationPage';
 import Categories from './pages/Categories/Categories.jsx'
 import CategoryCampaigns from './pages/Categories/CategoryCampaigns.jsx';
-
+import FinishedProjects from './pages/Home/FinishedProjects';
 function App() {
   return (
     <BrowserRouter>
@@ -33,6 +33,7 @@ function App() {
             <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
             <Route path="/activate/:uidb64/:token" element={<Activate />} />
             <Route path="/campains" element={<Projects />} />
+            <Route path="/finished" element={<FinishedProjects />} />
             <Route path="/projects/:id" element={<ProjectDetails />} />
             <Route path="/create-campaign" element={<CreateProject />} />
             <Route path="/projects/:id/update" element={<ProjectUpdate />} />

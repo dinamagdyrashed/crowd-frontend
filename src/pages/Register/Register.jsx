@@ -84,10 +84,10 @@ const Register = () => {
     script.crossOrigin = 'anonymous';
     script.onload = () => {
       window.FB.init({
-        appId: '1004483484552046',
+        appId: '583449137409337',
         cookie: true,
         xfbml: true,
-        version: 'v19.0'
+        version: 'v22.0'
       });
     };
     document.body.appendChild(script);
@@ -130,30 +130,53 @@ const Register = () => {
 
           {/* Social Login Buttons */}
           <div className="flex flex-col items-center gap-4 mb-6">
-            <button
+          <button
               type="button"
               onClick={() => {
-                window.FB.login(response => {
-                  if (response.authResponse) {
-                    authAPI.facebookLogin({ access_token: response.authResponse.accessToken })
-                      .then(() => {
-                        toast.success('Facebook registration successful!');
-                        navigate('/home');
-                      })
-                      .catch(error => {
-                        console.error('Facebook registration error:', error);
-                        toast.error(error.error || 'Facebook registration failed');
+                window.FB.login(
+                  response => {
+                    if (response.authResponse) {
+                      const accessToken = response.authResponse.accessToken;
+
+                      // Fetch user info from Facebook
+                      window.FB.api('/me', { fields: 'name,email,first_name,last_name,picture' }, async userInfo => {
+                        const email = userInfo.email;
+
+                        if (!email) {
+                          toast.error('Email not found in Facebook profile');
+                          return;
+                        }
+
+                        try {
+                          const emailExists = await checkEmailExists(email);
+
+                          if (emailExists) {
+                            toast.error('Account already exists. Please login.');
+                            return;
+                          }
+
+                          await authAPI.facebookRegister({ access_token: accessToken });
+
+                          toast.success('Facebook registration successful!');
+                          navigate('/login');
+                        } catch (error) {
+                          console.error('Facebook registration error:', error);
+                          toast.error(error?.error || 'Facebook registration failed');
+                        }
                       });
-                  } else {
-                    toast.error('Facebook registration cancelled');
-                  }
-                }, { scope: 'public_profile,email' });
+                    } else {
+                      toast.error('Facebook registration cancelled');
+                    }
+                  },
+                  { scope: 'public_profile,email' }
+                );
               }}
               className="p-1 max-w-xs h-10 border border-[#48A6A7] rounded-lg hover:bg-[#48A6A7] hover:text-white transition duration-300 text-[#006A71] font-semibold text-sm sm:text-base flex items-center justify-center gap-2"
             >
               <FaFacebookF className="w-5 h-5 text-[#006A71] hover:text-white" />
               Continue with Facebook
             </button>
+
             <GoogleOAuthProvider clientId="75773251008-89sei1vuligu58shbmup4f5ttqq097o5.apps.googleusercontent.com">
               <GoogleLogin
                 onSuccess={async (credentialResponse) => {

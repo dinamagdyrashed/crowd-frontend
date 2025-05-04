@@ -51,8 +51,8 @@ const DonationPage = () => {
                     phone_number: '',
                     country: ''
                 },
-                notification_url: 'http://localhost:8000/api/projects/paymob/callback/',
-                redirection_url: `http://localhost:3000/projects/${id}/?payment=success`
+                notification_url: 'https://1357-102-189-207-6.ngrok-free.app/api/projects/paymob/callback/',// Backend callback
+                redirection_url: `https://a64d-102-189-207-6.ngrok-free.app/projects/${id}/?payment=success` // Frontend redirect
             }, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
@@ -96,7 +96,7 @@ const DonationPage = () => {
                             </button>
                         </motion.div>
                         <FaDonate className="text-4xl text-white mx-auto mb-3" />
-                        <h1 className="text-2xl font-bold text-white">Support This Campain</h1>
+                        <h1 className="text-2xl font-bold text-white">Support This Project</h1>
                     </div>
 
                     <div className="p-6 sm:p-8">
