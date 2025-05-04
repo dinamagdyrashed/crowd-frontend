@@ -84,8 +84,8 @@ const ProjectDetails = () => {
     const [similarProjects, setSimilarProjects] = useState([]);
     const [similarLoading, setSimilarLoading] = useState(false);
     const [similarError, setSimilarError] = useState(null);
-
     const shareButtonRef = useRef(null);
+
 
     const sliderSettings = {
         dots: true,
@@ -109,15 +109,38 @@ const ProjectDetails = () => {
             setLoading(false);
         }
     };
-
+    const handleRatingSubmit = async (ratingValue) => {
+        try {
+            const response = await axios.post(`http://localhost:8000/api/projects/ratings/`, {
+                project: project.id,
+                value: ratingValue,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            // Update the states with the new rating value from the response
+            setPreviousRating(response.data.value);
+            setUserRating(response.data.value);
+            Alert.success('Rating submitted!', 'Thank you for your feedback.');
+            // Refresh project details to update average rating
+            await fetchProjectDetails();
+        } catch (err) {
+            console.error('Rating submission error:', err.response?.data);
+            Alert.error('Error!', err.response?.data?.detail || 'Failed to submit rating.');
+        }
+    };
     const fetchUserRating = async () => {
         setRatingLoading(true);
         try {
             const token = localStorage.getItem('accessToken');
             if (!token) {
-                throw new Error('No access token');
+                setPreviousRating(null);
+                setUserRating(0);
+                return;
             }
-            const response = await axios.get(`http://localhost:8000/api/projects/ratings/user/${id}/`, {
+            const response = await axios.get(`http://localhost:8000/api/projects/projects/${id}/ratings/user/`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -127,11 +150,13 @@ const ProjectDetails = () => {
                 setUserRating(response.data.value);
             }
         } catch (err) {
-            if (err.response?.status !== 404) {
+            // If user is not authenticated or rating doesn't exist, reset the states
+            if (err.response?.status === 404 || err.response?.status === 401) {
+                setPreviousRating(null);
+                setUserRating(0);
+            } else {
                 Alert.error('Error!', 'Failed to fetch your rating.');
             }
-            setPreviousRating(null);
-            setUserRating(0);
         } finally {
             setRatingLoading(false);
         }
@@ -174,6 +199,13 @@ const ProjectDetails = () => {
         }
     }, [id]);
 
+ 
+    // Toggle dropdown
+    const handleShare = () => {
+        setShowShareDropdown(prev => !prev);
+    };
+
+   // Close dropdown if clicked outside
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (shareButtonRef.current && !shareButtonRef.current.contains(event.target)) {
@@ -186,23 +218,8 @@ const ProjectDetails = () => {
         };
     }, []);
 
-    const handleRatingSubmit = async () => {
-        try {
-            await axios.post(`http://localhost:8000/api/projects/ratings/`, {
-                project: project.id,
-                value: userRating,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                },
-            });
-            Alert.success('Rating submitted!', 'Thank you for your feedback.');
-            setPreviousRating(userRating);
-            await fetchUserRating();
-        } catch (err) {
-            Alert.error('Error!', err.response?.data?.detail || 'Failed to submit rating.');
-        }
-    };
+
+  
 
     const postComment = async (parentId = null) => {
         if ((parentId === null && !newCommentText.trim()) || (parentId !== null && !replyText.trim())) {
@@ -270,9 +287,9 @@ const ProjectDetails = () => {
         }
     };
 
-    const handleShare = () => {
-        setShowShareDropdown(!showShareDropdown);
-    };
+    // const handleShare = () => {
+    //     setShowShareDropdown(!showShareDropdown);
+    // };
 
     const shareLinks = project ? [
         {
@@ -296,7 +313,22 @@ const ProjectDetails = () => {
             url: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(`${window.location.origin}/projects/${id}`)}&title=${encodeURIComponent(project.title)}&summary=${encodeURIComponent(project.details.substring(0, 200))}`,
         },
     ] : [];
-
+    // New function to open social media share windows and log share event
+    const openShareWindow = async (platform, url) => {
+        window.open(url, '_blank', 'width=600,height=400');
+        try {
+            await axios.post('http://localhost:8000/api/projects/shares/', {
+                project: project.id,
+                platform: platform,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                },
+            });
+        } catch (err) {
+            console.error('Error logging share event:', err);
+        }
+    };
     const renderComments = (commentsList) => {
         return commentsList.map((comment) => (
             <div key={comment.id} className="border border-[#9ACBD0] rounded-lg p-4 mb-3 bg-[#F2EFE7] relative">
@@ -478,7 +510,14 @@ const ProjectDetails = () => {
                     <div className="mb-6">
                         <div className="flex items-center justify-between mb-4">
                             <h2 className="text-xl font-bold text-[#006A71]">Rate this Campaign</h2>
-                            <span className="text-[#1e1e1e]">Average: {averageRating || 'No ratings yet'}</span>
+                            <div className="flex items-center space-x-2 bg-[#F2EFE7] px-4 py-2 rounded-full border border-[#9ACBD0]">
+                                <span className="text-[#006A71] font-semibold">Average Rating:</span>
+                                <div className="flex items-center">
+                                    <span className="text-amber-500 text-xl mr-1">★</span>
+                                    <span className="text-[#1e1e1e] font-bold">{averageRating ? averageRating.toFixed(1) : '0.0'}</span>
+                                    {!averageRating && <span className="text-gray-500 text-sm ml-1">(No ratings yet)</span>}
+                                </div>
+                            </div>
                         </div>
                         {ratingLoading ? (
                             <div className="flex justify-center">
@@ -487,32 +526,47 @@ const ProjectDetails = () => {
                         ) : (
                             <div className="flex items-center space-x-2 mb-3">
                                 {[1, 2, 3, 4, 5].map((star) => (
-                                    <span
+                                    <label
                                         key={star}
-                                        className={`text-3xl ${previousRating !== null
-                                            ? star <= previousRating
-                                                ? 'text-amber-500'
-                                                : 'text-gray-300'
-                                            : star <= userRating
-                                                ? 'text-amber-500'
-                                                : 'text-gray-300'
-                                            } ${previousRating !== null ? 'cursor-default' : 'cursor-pointer'}`}
-                                        onClick={previousRating !== null ? undefined : () => setUserRating(star)}
-                                        aria-label={`Rate ${star} star`}
+                                        htmlFor={`rating-star-${star}`}
+                                        className="cursor-pointer"
                                     >
-                                        ★
-                                    </span>
+                                        <input
+                                            type="radio"
+                                            id={`rating-star-${star}`}
+                                            name="rating"
+                                            value={star}
+                                            className="hidden"
+                                            checked={star === (previousRating || userRating)}
+                                            onChange={() => {
+                                                setUserRating(star);
+                                                if (previousRating !== null) {
+                                                    setPreviousRating(star);
+                                                    handleRatingSubmit(star);
+                                                }
+                                            }}
+                                        />
+                                        <span
+                                            className={`text-3xl ${star <= (previousRating || userRating)
+                                                ? 'text-amber-500'
+                                                : 'text-gray-300'
+                                                } hover:scale-110 transition-transform`}
+                                            aria-label={`Rate ${star} star`}
+                                        >
+                                            ★
+                                        </span>
+                                    </label>
                                 ))}
-                                {previousRating !== null && (
+                                {(previousRating || userRating) > 0 && (
                                     <span className="text-[#006A71] text-lg font-semibold">
-                                        {previousRating}
+                                        {previousRating || userRating}
                                     </span>
                                 )}
                             </div>
                         )}
                         {previousRating === null && !ratingLoading && (
                             <button
-                                onClick={handleRatingSubmit}
+                                onClick={() => handleRatingSubmit(userRating)}
                                 className={`w-full p-2 rounded-lg ${!userRating ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#48A6A7] hover:bg-[#006A71] text-white'
                                     } transition duration-200`}
                                 disabled={!userRating}
@@ -618,25 +672,28 @@ const ProjectDetails = () => {
                                     >
                                         <div className="py-2">
                                             {shareLinks.map(({ platform, icon, url }) => (
-                                                <a
+                                                <button
                                                     key={platform}
-                                                    href={url}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="flex items-center px-4 py-2 text-[#006A71] hover:bg-[#F2EFE7] transition duration-200"
-                                                    onClick={() => setShowShareDropdown(false)}
+                                                    onClick={() => {
+                                                        openShareWindow(platform, url);
+                                                        setShowShareDropdown(false);
+                                                    }}
+                                                    className="flex w-full text-left items-center px-4 py-2 text-[#006A71] hover:bg-[#F2EFE7] transition duration-200"
                                                     aria-label={`Share on ${platform}`}
                                                 >
                                                     <span className="mr-2">{icon}</span>
                                                     {platform}
-                                                </a>
+                                                </button>
                                             ))}
                                         </div>
                                     </motion.div>
                                 )}
                             </AnimatePresence>
                         </div>
+
                     </div>
+
+
 
                     <div className="border-t border-[#9ACBD0] pt-6">
                         <h2 className="text-xl font-bold text-[#006A71] mb-4 flex items-center">
