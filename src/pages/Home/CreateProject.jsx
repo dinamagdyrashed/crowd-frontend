@@ -126,7 +126,7 @@ const CreateProject = () => {
         <div className="flex items-center justify-center min-h-screen bg-[#F2EFE7] p-4">
             <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="w-full bg-[#006A71] p-6 flex flex-col justify-center items-center text-center">
-                    <h1 className="text-2xl sm:text-3xl font-bold text-[#ffffff] mb-2">Create New Project</h1>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-[#ffffff] mb-2">Create New Campain</h1>
                     <p className="text-[#ffffff] text-sm sm:text-base">Bring your creative ideas to life</p>
                 </div>
 
@@ -134,7 +134,7 @@ const CreateProject = () => {
                     {success && (
                         <div className="flex items-center justify-center mb-4 text-green-500">
                             <FaCheckCircle className="mr-2" />
-                            <p>Project created successfully!</p>
+                            <p>Campain created successfully!</p>
                         </div>
                     )}
                     {error && (
@@ -151,7 +151,7 @@ const CreateProject = () => {
                                 name="title"
                                 value={formData.title}
                                 onChange={handleChange}
-                                placeholder="Project Title"
+                                placeholder="Campain Title"
                                 className="w-full pl-4 pr-4 py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-sm sm:text-base"
                                 required
                                 aria-label="Project Title"
@@ -163,7 +163,7 @@ const CreateProject = () => {
                                 name="details"
                                 value={formData.details}
                                 onChange={handleChange}
-                                placeholder="Project Details"
+                                placeholder="Campain Details"
                                 rows="4"
                                 className="w-full pl-4 pr-4 py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-sm sm:text-base"
                                 required
@@ -350,7 +350,7 @@ const CreateProject = () => {
                             disabled={loading}
                             aria-label="Create Project"
                         >
-                            {loading ? <FaSpinner className="animate-spin mr-2" /> : 'Create Project'}
+                            {loading ? <FaSpinner className="animate-spin mr-2" /> : 'Create Campain'}
                         </button>
                     </form>
                 </div>

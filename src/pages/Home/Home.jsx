@@ -118,7 +118,7 @@ const Home = () => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
             >
-                <SectionHeader title="Top Rated Projects" link="/projects" />
+                <SectionHeader title="Top Rated Campains" link="/projects" />
                 <Slider {...sliderSettings} className="mb-8">
                     {topRatedProjects.map((project) => (
                         <div key={project.id} className="px-2">
@@ -255,7 +255,7 @@ const Home = () => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
             >
-                <SectionHeader title="Featured Projects" link="/projects" />
+                <SectionHeader title="Featured Campains" link="/projects" />
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {featuredProjects.slice(0, 4).map((project) => (
                         <ProjectCard key={project.id} project={project} />
