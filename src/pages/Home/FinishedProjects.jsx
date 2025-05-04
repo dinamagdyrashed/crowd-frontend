@@ -8,7 +8,7 @@ import MainProjectCard from '../../components/MainProjectCard';
 
 
 
-const Projects = () => {
+const FinishedProjects = () => {
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -22,7 +22,7 @@ const Projects = () => {
     const fetchProjectsAndCategories = async () => {
       try {
         const [projectsRes, categoriesRes] = await Promise.all([
-          axios.get('http://localhost:8000/api/projects/projects/'),
+          axios.get('http://localhost:8000/api/projects/projects/finished/'),
           axios.get('http://localhost:8000/api/projects/categories/')
         ]);
         setProjects(projectsRes.data);
@@ -159,4 +159,4 @@ const Projects = () => {
   );
 };
 
-export default Projects;
+export default FinishedProjects;

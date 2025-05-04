@@ -59,10 +59,10 @@ const Login = () => {
     script.crossOrigin = 'anonymous';
     script.onload = () => {
       window.FB.init({
-        appId: '1004483484552046',
+        appId: '583449137409337',
         cookie: true,
         xfbml: true,
-        version: 'v19.0'
+        version: 'v22.0'
       });
     };
     document.body.appendChild(script);
@@ -81,45 +81,50 @@ const Login = () => {
 
           {/* Social Login Buttons */}
           <div className="flex flex-col items-center gap-4 mb-6">
-            <button
+          <button
               type="button"
-              onClick={async () => {
-                window.FB.login(async response => {
-                  if (response.authResponse) {
-                    const accessToken = response.authResponse.accessToken;
-                    try {
-                      const userInfo = await new Promise((resolve) => {
-                        window.FB.api('/me', { fields: 'email' }, resolve);
+              onClick={() => {
+                window.FB.login(
+                  response => {
+                    if (response.authResponse) {
+                      const accessToken = response.authResponse.accessToken;
+
+                      window.FB.api('/me', { fields: ['email','picture'] }, async userInfo => {
+                        const email = userInfo.email;
+
+                        if (!email) {
+                          toast.error('Email not found in Facebook profile');
+                          return;
+                        }
+
+                        try {
+                          const emailExists = await checkEmailExists(email);
+                          if (!emailExists) {
+                            toast.error('Account does not exist. Please register first.');
+                            return;
+                          }
+
+                          await authAPI.facebookLogin({ access_token: accessToken });
+                          toast.success('Facebook login successful!');
+                          navigate('/home');
+                        } catch (error) {
+                          console.error('Facebook login error:', error);
+                          toast.error(error?.error || 'Facebook login failed');
+                        }
                       });
-                      const email = userInfo.email;
-
-                      if (!email) {
-                        toast.error('Email not found in Facebook profile');
-                        return;
-                      }
-
-                      const emailExists = await checkEmailExists(email);
-                      if (!emailExists) {
-                        toast.error("Account does not exist. Please register first.");
-                        return;
-                      }
-
-                      await authAPI.facebookLogin({ access_token: accessToken });
-                      toast.success('Facebook login successful!');
-                      navigate('/home');
-                    } catch (error) {
-                      toast.error(error.error || 'Facebook login failed');
+                    } else {
+                      toast.error('Facebook login cancelled');
                     }
-                  } else {
-                    toast.error('Facebook login cancelled');
-                  }
-                }, { scope: 'public_profile,email' });
+                  },
+                  { scope: 'public_profile,email' }
+                );
               }}
-              className=" p-1 max-w-xs h-10 border border-[#48A6A7] rounded-lg hover:bg-[#48A6A7] hover:text-white transition duration-300 text-[#006A71] font-semibold text-sm sm:text-base flex items-center justify-center gap-2"
+              className="p-1 max-w-xs h-10 border border-[#48A6A7] rounded-lg hover:bg-[#48A6A7] hover:text-white transition duration-300 text-[#006A71] font-semibold text-sm sm:text-base flex items-center justify-center gap-2"
             >
               <FaFacebookF className="w-5 h-5 text-[#006A71] hover:text-white" />
               Continue with Facebook
             </button>
+
 
             <GoogleOAuthProvider clientId="75773251008-89sei1vuligu58shbmup4f5ttqq097o5.apps.googleusercontent.com">
               <GoogleLogin
