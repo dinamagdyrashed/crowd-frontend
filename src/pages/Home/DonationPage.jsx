@@ -96,7 +96,8 @@ const DonationPage = () => {
                             </button>
                         </motion.div>
                         <FaDonate className="text-4xl text-white mx-auto mb-3" />
-                        <h1 className="text-2xl font-bold text-white">Support This Project</h1>
+                        <h1 className="text-2xl font-bold text-white">Support This Campain
+                        </h1>
                     </div>
 
                     <div className="p-6 sm:p-8">
@@ -162,7 +163,7 @@ const DonationPage = () => {
                         </form>
 
                         <div className="mt-6 text-center text-sm text-[#1e1e1e]">
-                            <p>Your donation will help bring this project to life.</p>
+                            <p>Your donation will help bring this Campain to life.</p>
                             <p className="mt-1">Thank you for your support!</p>
                         </div>
                     </div>

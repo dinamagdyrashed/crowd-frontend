@@ -8,7 +8,7 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
                     <div className="space-y-4">
-                        <h3 className="text-xl font-bold">Crowd<span className="text-[#00C897]">Funding</span></h3>
+                        <h3 className="text-xl font-bold"><span className="text-[#00C897]">Athr</span></h3>
                         <p className="text-sm">
                             Empowering communities through collective giving. Join us in making a difference one donation at a time.
                         </p>
@@ -25,9 +25,9 @@ const Footer = () => {
                         <h3 className="text-lg font-semibold">Quick Links</h3>
                         <ul className="space-y-2">
                             <li><a href="/home" className="hover:text-[#00C897] transition">Home</a></li>
-                            <li><a href="/search" className="hover:text-[#00C897] transition">Browse Campaigns</a></li>
+                            <li><a href="/campaigns" className="hover:text-[#00C897] transition">Browse Campaigns</a></li>
                             <li><a href="/donate" className="hover:text-[#00C897] transition">Donate</a></li>
-                            <li><a href="/fundraise" className="hover:text-[#00C897] transition">Start a Campaign</a></li>
+                            <li><a href="/create-campaign" className="hover:text-[#00C897] transition">Start a Campaign</a></li>
                             <li><a href="/about" className="hover:text-[#00C897] transition">About Us</a></li>
                         </ul>
                     </div>
