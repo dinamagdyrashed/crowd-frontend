@@ -4,6 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import { FaCheckCircle, FaExclamationCircle, FaSpinner, FaCamera, FaFileUpload, FaIdCard } from 'react-icons/fa';
 import Alert from '../../alert/Alert';
 
+const COLORS = {
+    primary: "#2563eb",     // blue-600
+    secondary: "#3b82f6",   // blue-500
+    accent: "#bfdbfe",      // blue-200
+    background: "#eff6ff",  // blue-100
+    textDark: "#374151",    // gray-700
+    textLight: "#ffffff"    // white
+};
+
 const CreateCampaign = () => {
     const token = localStorage.getItem('accessToken');
     const navigate = useNavigate();
@@ -319,7 +328,7 @@ const CreateCampaign = () => {
                                         <button
                                             type="button"
                                             onClick={() => handleTagRemove(tagName)}
-                                            className="ml-2 text-primary hover:text-text-dark"
+                                            className="ml-2 text-[#2563eb] hover:text-text-dark"
                                             aria-label={`Remove ${tagName} tag`}
                                         >
                                             ×
@@ -333,7 +342,7 @@ const CreateCampaign = () => {
                                     value={newTagInput}
                                     onChange={(e) => setNewTagInput(e.target.value)}
                                     placeholder="Add new tag"
-                                    className="flex-1 p-2 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                                    className="flex-1 p-2 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
                                     onKeyDown={(e) => {
                                         if (e.key === 'Enter' && newTagInput.trim()) {
                                             e.preventDefault();
@@ -353,7 +362,7 @@ const CreateCampaign = () => {
                                             setNewTagInput('');
                                         }
                                     }}
-                                    className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary transition duration-300"
+                                    className="bg-[#2563eb] text-white px-4 py-2 rounded-lg hover:bg-secondary transition duration-300"
                                     aria-label="Add tag"
                                 >
                                     Add
@@ -368,7 +377,7 @@ const CreateCampaign = () => {
                                         }
                                         e.target.value = "";
                                     }}
-                                    className="w-full p-2 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                                    className="w-full p-2 border border-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
                                     aria-label="Select existing tags"
                                 >
                                     <option value="">Add existing tag...</option>
@@ -444,6 +453,7 @@ const CreateCampaign = () => {
                                         <input
                                             type="file"
                                             className="hidden"
+                                            required
                                             onChange={handleUserPhotoChange}
                                             accept="image/*"
                                         />
@@ -476,6 +486,7 @@ const CreateCampaign = () => {
                                         <input
                                             type="file"
                                             className="hidden"
+                                            required
                                             onChange={handleIdFrontChange}
                                             accept="image/*"
                                         />
@@ -508,6 +519,7 @@ const CreateCampaign = () => {
                                         <input
                                             type="file"
                                             className="hidden"
+                                            required
                                             onChange={handleIdBackChange}
                                             accept="image/*"
                                         />
@@ -538,6 +550,7 @@ const CreateCampaign = () => {
                                     <input
                                         type="file"
                                         className="hidden"
+                                        required
                                         onChange={handleSupportingFilesChange}
                                         multiple
                                         accept=".pdf,.jpg,.jpeg,.png"
