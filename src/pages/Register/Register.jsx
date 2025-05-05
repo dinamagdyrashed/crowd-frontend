@@ -7,6 +7,7 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { useEffect, useState } from 'react';
 import defaultProfilePic from '../../assets/default-profile-pic.png';
 import { FaCamera, FaUser, FaEnvelope, FaLock, FaPhone, FaCalendarAlt, FaGlobe, FaFacebookF } from 'react-icons/fa';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const checkEmailExists = async (email) => {
   try {
@@ -110,15 +111,15 @@ const Register = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#F2EFE7] p-4">
+    <div className="flex items-center justify-center min-h-screen bg-[#eff6ff] p-4">
       <div className="flex flex-col md:flex-row w-full max-w-4xl rounded-lg shadow-lg overflow-hidden">
         {/* Left Side */}
-        <div className="w-full md:w-1/2 bg-[#006A71] p-6 sm:p-8 flex flex-col justify-center items-center text-center">
+        <div className="w-full md:w-1/2 bg-[#2563eb] p-6 sm:p-8 flex flex-col justify-center items-center text-center">
           <h2 className="text-2xl sm:text-3xl font-bold text-[#ffffff] mb-4">Already have an account?</h2>
           <p className="text-[#ffffff] mb-6 text-sm sm:text-base">Let's get you logged back in.</p>
           <button
             onClick={() => navigate('/login')}
-            className="border-2 border-[#ffffff] text-[#ffffff] hover:bg-[#48A6A7] hover:border-[#48A6A7] font-semibold py-2 px-4 sm:px-6 rounded-lg transition duration-300 text-sm sm:text-base"
+            className="border-2 border-[#ffffff] text-[#ffffff] hover:bg-[#3b82f6] hover:border-[#3b82f6] font-semibold py-2 px-4 sm:px-6 rounded-lg transition duration-300 text-sm sm:text-base"
           >
             Login
           </button>
@@ -126,7 +127,7 @@ const Register = () => {
 
         {/* Right Side */}
         <div className="w-full md:w-1/2 bg-white p-6 sm:p-8">
-          <h2 className="text-xl sm:text-2xl font-bold text-[#006A71] text-center mb-6">Create account</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-[#2563eb] text-center mb-6">Create account</h2>
 
           {/* Form */}
           <Formik
@@ -200,7 +201,7 @@ const Register = () => {
                 {/* Profile Picture Upload */}
                 <div className="flex justify-center mb-6">
                   <div className="relative">
-                    <div className="w-24 sm:w-32 h-24 sm:h-32 rounded-full overflow-hidden border-4 border-[#48A6A7] flex items-center justify-center">
+                    <div className="w-24 sm:w-32 h-24 sm:h-32 rounded-full overflow-hidden border-4 border-[#3b82f6] flex items-center justify-center">
                       <img
                         src={profilePicture}
                         alt="Profile Preview"
@@ -209,7 +210,7 @@ const Register = () => {
                     </div>
                     <label
                       htmlFor="profile_picture"
-                      className="absolute bottom-0 right-0 bg-[#006A71] rounded-full p-2 cursor-pointer hover:bg-[#04828c] transition duration-300"
+                      className="absolute bottom-0 right-0 bg-[#2563eb] rounded-full p-2 cursor-pointer hover:bg-[#3b82f6] transition duration-300"
                     >
                       <FaCamera className="text-white w-4 h-4 sm:w-5 sm:h-5" />
                       <input
@@ -226,100 +227,100 @@ const Register = () => {
 
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="w-full sm:w-1/2 relative">
-                    <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#48A6A7] w-4 h-4 sm:w-5 sm:h-5" />
+                    <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#3b82f6] w-4 h-4 sm:w-5 sm:h-5" />
                     <Field
                       type="text"
                       name="first_name"
                       placeholder="Your first name"
-                      className="w-full pl-10 pr-4 py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-sm sm:text-base"
+                      className="w-full pl-10 pr-4 py-2 border border-[#bfdbfe] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb] text-[#1e1e1e] text-sm sm:text-base"
                     />
                     <ErrorMessage name="first_name" component="div" className="text-red-500 text-xs sm:text-sm mt-1" />
                   </div>
                   <div className="w-full sm:w-1/2 relative">
-                    <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#48A6A7] w-4 h-4 sm:w-5 sm:h-5" />
+                    <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#3b82f6] w-4 h-4 sm:w-5 sm:h-5" />
                     <Field
                       type="text"
                       name="last_name"
                       placeholder="Your last name"
-                      className="w-full pl-10 pr-4 py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-sm sm:text-base"
+                      className="w-full pl-10 pr-4 py-2 border border-[#bfdbfe] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb] text-[#1e1e1e] text-sm sm:text-base"
                     />
                     <ErrorMessage name="last_name" component="div" className="text-red-500 text-xs sm:text-sm mt-1" />
                   </div>
                 </div>
 
                 <div className="relative">
-                  <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#48A6A7] w-4 h-4 sm:w-5 sm:h-5" />
+                  <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#3b82f6] w-4 h-4 sm:w-5 sm:h-5" />
                   <Field
                     type="text"
                     name="username"
                     placeholder="Username"
-                    className="w-full pl-10 pr-4 py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-sm sm:text-base"
+                    className="w-full pl-10 pr-4 py-2 border border-[#bfdbfe] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb] text-[#1e1e1e] text-sm sm:text-base"
                   />
                   <ErrorMessage name="username" component="div" className="text-red-500 text-xs sm:text-sm mt-1" />
                 </div>
 
                 <div className="relative">
-                  <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#48A6A7] w-4 h-4 sm:w-5 sm:h-5" />
+                  <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#3b82f6] w-4 h-4 sm:w-5 sm:h-5" />
                   <Field
                     type="email"
                     name="email"
                     placeholder="Your email"
-                    className="w-full pl-10 pr-4 py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-sm sm:text-base"
+                    className="w-full pl-10 pr-4 py-2 border border-[#bfdbfe] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb] text-[#1e1e1e] text-sm sm:text-base"
                   />
                   <ErrorMessage name="email" component="div" className="text-red-500 text-xs sm:text-sm mt-1" />
                 </div>
 
                 <div className="relative">
-                  <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#48A6A7] w-4 h-4 sm:w-5 sm:h-5" />
+                  <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#3b82f6] w-4 h-4 sm:w-5 sm:h-5" />
                   <Field
                     type="password"
                     name="password"
                     placeholder="Password"
-                    className="w-full pl-10 pr-4 py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-sm sm:text-base"
+                    className="w-full pl-10 pr-4 py-2 border border-[#bfdbfe] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb] text-[#1e1e1e] text-sm sm:text-base"
                   />
                   <ErrorMessage name="password" component="div" className="text-red-500 text-xs sm:text-sm mt-1" />
                 </div>
 
                 <div className="relative">
-                  <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#48A6A7] w-4 h-4 sm:w-5 sm:h-5" />
+                  <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#3b82f6] w-4 h-4 sm:w-5 sm:h-5" />
                   <Field
                     type="password"
                     name="confirm_password"
                     placeholder="Confirm Password"
-                    className="w-full pl-10 pr-4 py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-sm sm:text-base"
+                    className="w-full pl-10 pr-4 py-2 border border-[#bfdbfe] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb] text-[#1e1e1e] text-sm sm:text-base"
                   />
                   <ErrorMessage name="confirm_password" component="div" className="text-red-500 text-xs sm:text-sm mt-1" />
                 </div>
 
                 <div className="relative">
-                  <FaPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#48A6A7] w-4 h-4 sm:w-5 sm:h-5" />
+                  <FaPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#3b82f6] w-4 h-4 sm:w-5 sm:h-5" />
                   <Field
                     type="text"
                     name="mobile_phone"
                     placeholder="Mobile Phone (e.g., 01234567890)"
-                    className="w-full pl-10 pr-4 py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-sm sm:text-base"
+                    className="w-full pl-10 pr-4 py-2 border border-[#bfdbfe] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb] text-[#1e1e1e] text-sm sm:text-base"
                   />
                   <ErrorMessage name="mobile_phone" component="div" className="text-red-500 text-xs sm:text-sm mt-1" />
                 </div>
 
                 <div className="relative">
-                  <FaCalendarAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#48A6A7] w-4 h-4 sm:w-5 sm:h-5" />
+                  <FaCalendarAlt className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#3b82f6] w-4 h-4 sm:w-5 sm:h-5" />
                   <Field
                     type="date"
                     name="birthdate"
                     placeholder="Birthdate"
-                    className="w-full pl-10 pr-4 py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-sm sm:text-base"
+                    className="w-full pl-10 pr-4 py-2 border border-[#bfdbfe] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb] text-[#1e1e1e] text-sm sm:text-base"
                   />
                   <ErrorMessage name="birthdate" component="div" className="text-red-500 text-xs sm:text-sm mt-1" />
                 </div>
 
                 <div className="relative">
-                  <FaGlobe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#48A6A7] w-4 h-4 sm:w-5 sm:h-5" />
+                  <FaGlobe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#3b82f6] w-4 h-4 sm:w-5 sm:h-5" />
                   <Field
                     type="text"
                     name="country"
                     placeholder="Country (optional)"
-                    className="w-full pl-10 pr-4 py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-sm sm:text-base"
+                    className="w-full pl-10 pr-4 py-2 border border-[#bfdbfe] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb] text-[#1e1e1e] text-sm sm:text-base"
                   />
                   <ErrorMessage name="country" component="div" className="text-red-500 text-xs sm:text-sm mt-1" />
                 </div>
@@ -329,7 +330,7 @@ const Register = () => {
                     type="checkbox"
                     name="terms"
                     id="terms"
-                    className="mr-2 accent-[#48A6A7] w-4 h-4 sm:w-5 sm:h-5"
+                    className="mr-2 accent-[#3b82f6] w-4 h-4 sm:w-5 sm:h-5"
                   />
                   <label htmlFor="terms" className="text-[#1e1e1e] text-xs sm:text-sm">
                     I have read, understood and agree to the terms and privacy policy
@@ -340,7 +341,7 @@ const Register = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-[#006A71] hover:bg-[#04828c] text-[#ffffff] font-semibold py-2 sm:py-3 rounded-lg transition duration-300 text-sm sm:text-base"
+                  className="w-full bg-[#2563eb] hover:bg-[#3b82f6] text-[#ffffff] font-semibold py-2 sm:py-3 rounded-lg transition duration-300 text-sm sm:text-base"
                 >
                   {isSubmitting ? "Registering..." : "Sign up"}
                 </button>
@@ -390,9 +391,9 @@ const Register = () => {
                           { scope: 'public_profile,email' }
                         );
                       }}
-                      className="p-1.5 h-10 bg-white border border-[#9ACBD0] rounded-lg hover:bg-[#E5F4F5] transition duration-300 text-[#006A71] font-semibold text-sm sm:text-base flex items-center justify-center gap-2"
+                      className="p-1.5 h-10 bg-white border border-[#bfdbfe] rounded-lg hover:bg-[#bfdbfe] transition duration-300 text-[#2563eb] font-semibold text-sm sm:text-base flex items-center justify-center gap-2"
                     >
-                      <FaFacebookF className="w-5 h-5 text-[#006A71]" />
+                      <FaFacebookF className="w-5 h-5 text-[#2563eb]" />
                       Continue with Facebook
                     </button>
 
@@ -454,7 +455,7 @@ const Register = () => {
                         render={(renderProps) => (
                           <button
                             type="button"
-                            className="w-full h-10 bg-white border border-[#9ACBD0] rounded-lg hover:bg-[#E5F4F5] transition duration-300 text-[#006A71] font-semibold text-sm sm:text-base flex items-center justify-center gap-2"
+                            className="w-full h-10 bg-white border border-[#bfdbfe] rounded-lg hover:bg-[#bfdbfe] transition duration-300 text-[#2563eb] font-semibold text-sm sm:text-base flex items-center justify-center gap-2"
                             onClick={renderProps.onClick}
                             disabled={renderProps.disabled}
                           >

@@ -8,6 +8,15 @@ import { FiLogOut } from 'react-icons/fi';
 import AuthPopup from '../../components/AuthPopup';
 
 const Navbar = () => {
+  const colors = {
+    primary: "#2563eb",     // blue-600
+    secondary: "#3b82f6",   // blue-500
+    accent: "#bfdbfe",      // blue-200
+    background: "#eff6ff",  // blue-100
+    textDark: "#374151",    // gray-700
+    textLight: "#ffffff"    // white
+  };
+  
   const [user, setUser] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
@@ -53,7 +62,8 @@ const Navbar = () => {
   };
 
   const navItemClass =
-    'px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium hover:bg-[#E8F3F3] hover:text-[#006A71] transition duration-200';
+  'px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium hover:bg-[#bfdbfe] hover:text-[#2563eb] transition duration-200';
+
 
   return (
     <nav className="sticky top-0 z-40 bg-white shadow-md">
@@ -62,10 +72,11 @@ const Navbar = () => {
       <div className="max-w-[95%] sm:max-w-7xl mx-auto px-2 sm:px-4 py-2 sm:py-3 flex justify-between items-center relative">
         {/* Mobile Menu Button */}
         <div className="lg:hidden">
-          <button
-            onClick={toggleMenu}
-            className="text-[#006A71] hover:text-[#04828c] transition"
-          >
+        <button
+  onClick={toggleMenu}
+  className="text-[#2563eb] hover:text-[#3b82f6] transition"
+>
+
             {isMenuOpen ? <FaTimes size={20} sm:size={24} /> : <FaBars size={20} sm:size={24} />}
           </button>
         </div>
@@ -85,12 +96,13 @@ const Navbar = () => {
 
         {/* Center Logo */}
         <div className="absolute left-1/2 transform -translate-x-1/2 lg:static lg:transform-none lg:mx-auto">
-          <NavLink
-            to="/home"
-            className="flex items-center space-x-2 text-xl sm:text-2xl font-bold tracking-wide text-[#006A71]"
-          >
+        <NavLink
+  to="/home"
+  className="flex items-center space-x-2 text-xl sm:text-2xl font-bold tracking-wide text-[#2563eb]"
+>
+
             <img
-              src="public\Preview (2).png"
+              src="Preview (2).png"
               alt="Athr_Logo"
               className="h-6 w-6 sm:h-8 sm:w-8 object-contain rounded-full"
             />
@@ -106,9 +118,10 @@ const Navbar = () => {
           {user ? (
             <>
               <button
-                onClick={handleStartCampaign}
-                className="border border-[#006A71] text-[#006A71] px-3 py-1.5 sm:px-4 sm:py-2 rounded-full hover:bg-[#006A71] hover:text-white transition text-xs sm:text-sm"
-              >
+  onClick={handleStartCampaign}
+  className="border border-[#2563eb] text-[#2563eb] px-3 py-1.5 sm:px-4 sm:py-2 rounded-full hover:bg-[#2563eb] hover:text-[#ffffff] transition text-xs sm:text-sm"
+>
+
                 Start New Campaign
               </button>
               <NavLink to="/profile" className={navItemClass}>
@@ -128,9 +141,10 @@ const Navbar = () => {
                 Sign in
               </NavLink>
               <button
-                onClick={handleStartCampaign}
-                className="border border-[#006A71] text-[#006A71] px-3 py-1.5 sm:px-4 sm:py-2 rounded-full hover:bg-[#006A71] hover:text-white transition text-xs sm:text-sm"
-              >
+  onClick={handleStartCampaign}
+  className="border border-[#2563eb] text-[#2563eb] px-3 py-1.5 sm:px-4 sm:py-2 rounded-full hover:bg-[#2563eb] hover:text-[#ffffff] transition text-xs sm:text-sm"
+>
+
                 Start New Campaign
               </button>
             </>
@@ -150,7 +164,7 @@ const Navbar = () => {
             <div className="flex justify-end mb-4 sm:mb-6">
               <button
                 onClick={toggleMenu}
-                className="text-[#006A71] hover:text-[#04828c]"
+                className="text-[#2563eb] hover:text-[#04828c]"
               >
                 <FaTimes size={20} sm:size={24} />
               </button>
@@ -158,17 +172,18 @@ const Navbar = () => {
 
             {/* Menu Items */}
             <NavLink
-              to="/home"
-              onClick={toggleMenu}
-              className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-gray-100 text-[#1e1e1e] hover:bg-[#006A71] hover:text-white rounded-md text-center transition text-xs sm:text-sm"
-            >
+  to="/home"
+  onClick={toggleMenu}
+  className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-[#eff6ff] text-[#374151] hover:bg-[#2563eb] hover:text-white rounded-md text-center transition text-xs sm:text-sm"
+>
+
               Home
             </NavLink>
 
             <NavLink
               to="/campaigns"
               onClick={toggleMenu}
-              className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-gray-100 text-[#1e1e1e] hover:bg-[#006A71] hover:text-white rounded-md text-center transition text-xs sm:text-sm"
+              className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-[#eff6ff] text-[#374151] hover:bg-[#2563eb] hover:text-white rounded-md text-center transition text-xs sm:text-sm"
             >
               Campaigns
             </NavLink>
@@ -176,7 +191,7 @@ const Navbar = () => {
             <NavLink
               to="/finished-campaigns"
               onClick={toggleMenu}
-              className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-gray-100 text-[#1e1e1e] hover:bg-[#006A71] hover:text-white rounded-md text-center transition text-xs sm:text-sm"
+              className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-[#eff6ff] text-[#374151] hover:bg-[#2563eb] hover:text-white rounded-md text-center transition text-xs sm:text-sm"
             >
               Finished Campaigns
             </NavLink>
@@ -184,7 +199,7 @@ const Navbar = () => {
             <NavLink
               to="/categories"
               onClick={toggleMenu}
-              className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-gray-100 text-[#1e1e1e] hover:bg-[#006A71] hover:text-white rounded-md text-center transition text-xs sm:text-sm"
+              className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-[#eff6ff] text-[#374151] hover:bg-[#2563eb] hover:text-white rounded-md text-center transition text-xs sm:text-sm"
             >
               Categories
             </NavLink>
@@ -192,7 +207,7 @@ const Navbar = () => {
             <NavLink
               to="/about"
               onClick={toggleMenu}
-              className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-gray-100 text-[#1e1e1e] hover:bg-[#006A71] hover:text-white rounded-md text-center transition text-xs sm:text-sm"
+              className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-[#eff6ff] text-[#374151] hover:bg-[#2563eb] hover:text-white rounded-md text-center transition text-xs sm:text-sm"
             >
               About
             </NavLink>
@@ -204,7 +219,7 @@ const Navbar = () => {
                     handleStartCampaign();
                     toggleMenu();
                   }}
-                  className="w-full py-2 sm:py-3 px-3 sm:px-4 border border-[#006A71] text-[#006A71] hover:bg-[#006A71] hover:text-white rounded-md text-center transition text-xs sm:text-sm"
+                  className="w-full py-2 sm:py-3 px-3 sm:px-4 border border-[#2563eb] text-[#2563eb] hover:bg-[#2563eb] hover:text-white rounded-md text-center transition text-xs sm:text-sm"
                 >
                   Start New Campaign
                 </button>
@@ -212,7 +227,7 @@ const Navbar = () => {
                 <NavLink
                   to="/profile"
                   onClick={toggleMenu}
-                  className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-gray-100 text-[#1e1e1e] hover:bg-[#006A71] hover:text-white rounded-md text-center transition text-xs sm:text-sm"
+                  className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-[#eff6ff] text-[#374151] hover:bg-[#2563eb] hover:text-white rounded-md text-center transition text-xs sm:text-sm"
                 >
                   Profile
                 </NavLink>
@@ -234,7 +249,7 @@ const Navbar = () => {
                 <NavLink
                   to="/login"
                   onClick={toggleMenu}
-                  className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-gray-100 text-[#1e1e1e] hover:bg-[#006A71] hover:text-white rounded-md text-center transition text-xs sm:text-sm"
+                  className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-[#eff6ff] text-[#374151] hover:bg-[#2563eb] hover:text-white rounded-md text-center transition text-xs sm:text-sm"
                 >
                   Sign in
                 </NavLink>
@@ -244,7 +259,7 @@ const Navbar = () => {
                     handleStartCampaign();
                     toggleMenu();
                   }}
-                  className="w-full py-2 sm:py-3 px-3 sm:px-4 border border-[#006A71] text-[#006A71] hover:bg-[#006A71] hover:text-white rounded-md text-center transition text-xs sm:text-sm"
+                  className="w-full py-2 sm:py-3 px-3 sm:px-4 border border-[#2563eb] text-[#2563eb] hover:bg-[#2563eb] hover:text-white rounded-md text-center transition text-xs sm:text-sm"
                 >
                   Start New Campaign
                 </button>

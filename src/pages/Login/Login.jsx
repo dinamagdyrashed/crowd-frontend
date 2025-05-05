@@ -73,11 +73,11 @@ const Login = () => {
   }, []);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#F2EFE7] p-4">
+    <div className="flex items-center justify-center min-h-screen bg-[#eff6ff ] p-4">
       <div className="flex flex-col md:flex-row w-full max-w-4xl rounded-lg shadow-lg overflow-hidden">
         {/* Left Side (Login Form) */}
         <div className="w-full md:w-1/2 bg-white p-6 sm:p-8">
-          <h2 className="text-xl sm:text-4xl font-bold text-[#006A71] mb-6 text-center">Login to Athr</h2>
+          <h2 className="text-xl sm:text-4xl font-bold text-[#2563eb] mb-6 text-center">Login to Athr</h2>
 
           {/* Login Form */}
           <Formik
@@ -104,29 +104,29 @@ const Login = () => {
             {({ isSubmitting }) => (
               <Form className="space-y-4">
                 <div className="relative">
-                  <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#48A6A7] w-4 h-4 sm:w-5 sm:h-5" />
+                  <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#3b82f6] w-4 h-4 sm:w-5 sm:h-5" />
                   <Field
                     type="email"
                     name="email"
                     placeholder="Email Address"
-                    className="w-full pl-10 pr-4 py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-sm sm:text-base"
+                    className="w-full pl-10 pr-4 py-2 border border-[#bfdbfe] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb] text-[#1e1e1e] text-sm sm:text-base"
                   />
                   <ErrorMessage name="email" component="div" className="text-red-500 text-xs sm:text-sm mt-1" />
                 </div>
 
                 <div className="relative">
-                  <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#48A6A7] w-4 h-4 sm:w-5 sm:h-5" />
+                  <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#3b82f6] w-4 h-4 sm:w-5 sm:h-5" />
                   <Field
                     type="password"
                     name="password"
                     placeholder="Password"
-                    className="w-full pl-10 pr-4 py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-sm sm:text-base"
+                    className="w-full pl-10 pr-4 py-2 border border-[#bfdbfe] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb] text-[#1e1e1e] text-sm sm:text-base"
                   />
                   <ErrorMessage name="password" component="div" className="text-red-500 text-xs sm:text-sm mt-1" />
                 </div>
 
                 <div className="text-right">
-                  <a href="/forgot-password" className="text-[#006A71] text-xs sm:text-sm hover:underline">
+                  <a href="/forgot-password" className="text-[#2563eb] text-xs sm:text-sm hover:underline">
                     Forgot your password?
                   </a>
                 </div>
@@ -134,7 +134,7 @@ const Login = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-[#006A71] hover:bg-[#04828c] text-[#ffffff] font-semibold py-2 sm:py-3 rounded-lg transition duration-300 text-sm sm:text-base"
+                  className="w-full bg-[#2563eb] hover:bg-[#3b82f6] text-[#ffffff] font-semibold py-2 sm:py-3 rounded-lg transition duration-300 text-sm sm:text-base"
                 >
                   {isSubmitting ? 'Logging in...' : 'Login'}
                 </button>
@@ -181,9 +181,9 @@ const Login = () => {
                           { scope: 'public_profile,email' }
                         );
                       }}
-                      className=" p-1.5 h-10 bg-white border border-[#9ACBD0] rounded-lg hover:bg-[#E5F4F5] transition duration-300 text-[#006A71] font-semibold text-sm sm:text-base flex items-center justify-center gap-2"
+                      className=" p-1.5 h-10 bg-white border border-[#bfdbfe] rounded-lg hover:bg-[#bfdbfe] transition duration-300 text-[#2563eb] font-semibold text-sm sm:text-base flex items-center justify-center gap-2"
                     >
-                      <FaFacebookF className="w-5 h-5 text-[#006A71]" />
+                      <FaFacebookF className="w-5 h-5 text-[#2563eb]" />
                       Continue with Facebook
                     </button>
 
@@ -230,7 +230,7 @@ const Login = () => {
                         render={(renderProps) => (
                           <button
                             type="button"
-                            className="w-full h-10 bg-white border border-[#9ACBD0] rounded-lg hover:bg-[#E5F4F5] transition duration-300 text-[#006A71] font-semibold text-sm sm:text-base flex items-center justify-center gap-2"
+                            className="w-full h-10 bg-white border border-[#bfdbfe] rounded-lg hover:bg-[#bfdbfe] transition duration-300 text-[#2563eb] font-semibold text-sm sm:text-base flex items-center justify-center gap-2"
                             onClick={renderProps.onClick}
                             disabled={renderProps.disabled}
                           >
@@ -269,12 +269,12 @@ const Login = () => {
         </div>
 
         {/* Right Side (Sign Up Prompt) */}
-        <div className="w-full md:w-1/2 bg-[#006A71] p-6 sm:p-8 flex flex-col justify-center items-center text-center">
+        <div className="w-full md:w-1/2 bg-[#2563eb] p-6 sm:p-8 flex flex-col justify-center items-center text-center">
           <h2 className="text-2xl sm:text-3xl font-bold text-[#ffffff] mb-4">New here?</h2>
           <p className="text-[#ffffff] mb-6 text-sm sm:text-base">We'll get you signed up in no time.</p>
           <button
             onClick={() => navigate('/register')}
-            className="border-2 border-[#ffffff] text-[#ffffff] hover:bg-[#48A6A7] hover:border-[#48A6A7] font-semibold py-2 px-4 sm:px-6 rounded-lg transition duration-300 text-sm sm:text-base"
+            className="border-2 border-[#ffffff] text-[#ffffff] hover:bg-[#3b82f6] hover:border-[#3b82f6] font-semibold py-2 px-4 sm:px-6 rounded-lg transition duration-300 text-sm sm:text-base"
           >
             Sign up
           </button>

@@ -354,21 +354,21 @@ const Profile = () => {
   const age = calculateAge(user.birthdate);
 
   return (
-    <div className="min-h-screen bg-[#F2EFE7] flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-[#eff6ff] flex flex-col lg:flex-row">
       {/* Sidebar */}
-      <div className= {`fixed inset-y-0 lg:static lg:w-64 bg-[#006A71] text-[#ffffff] flex flex-col z-10 transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+      <div className= {`fixed inset-y-0 lg:static lg:w-64 bg-[#2563eb] text-[#ffffff] flex flex-col z-10 transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
         {/* Sidebar Header */}
-        <div className="flex items-center justify-between p-4 border-b border-[#48A6A7]">
+        <div className="flex items-center justify-between p-4 border-b border-[#3b82f6]">
           <div className="flex items-center gap-3">
             <div className="relative">
               <img
                 src={typeof profilePicture === 'string' ? profilePicture : '/default-profile-pic.png'}
                 alt="Profile"
-                className="w-10 h-10 rounded-full border-2 border-[#9ACBD0] object-cover"
+                className="w-10 h-10 rounded-full border-2 border-[#bfdbfe] object-cover"
               />
               <label
                 htmlFor="profilePictureSidebar"
-                className="absolute bottom-0 right-0 bg-[#006A71] rounded-full p-1 cursor-pointer hover:bg-[#04828c] transition duration-300"
+                className="absolute bottom-0 right-0 bg-[#2563eb] rounded-full p-1 cursor-pointer hover:bg-[#04828c] transition duration-300"
               >
                 <FaPencilAlt className="w-3 h-3 text-[#ffffff]" />
               </label>
@@ -397,7 +397,7 @@ const Profile = () => {
               <button
                 className="flex items-center gap-3 w-full text-left p-2 hover:bg-[#04828c] rounded-lg"
               >
-                <FaUser className="w-5 h-5 text-[#48A6A7]" />
+                <FaUser className="w-5 h-5 text-[#3b82f6]" />
                 <span className="text-sm">My Profile</span>
               </button>
             </li>
@@ -406,7 +406,7 @@ const Profile = () => {
                 onClick={handleLogout}
                 className="flex items-center gap-3 w-full text-left p-2 hover:bg-[#04828c] rounded-lg"
               >
-                <FaSignOutAlt className="w-5 h-5 text-[#48A6A7]" />
+                <FaSignOutAlt className="w-5 h-5 text-[#3b82f6]" />
                 <span className="text-sm">Log Out</span>
               </button>
             </li>
@@ -417,7 +417,7 @@ const Profile = () => {
       {/* Main Content */}
       <div className="flex-1 p-4 lg:p-8">
         {/* Hamburger Menu for Mobile */}
-        <button className="lg:hidden mb-4 text-[#006A71]" onClick={() => setIsSidebarOpen(true)}>
+        <button className="lg:hidden mb-4 text-[#2563eb]" onClick={() => setIsSidebarOpen(true)}>
           <FaBars className="w-6 h-6" />
         </button>
 
@@ -428,11 +428,11 @@ const Profile = () => {
               <img
                 src={typeof profilePicture === 'string' ? profilePicture : '/default-profile-pic.png'}
                 alt="Profile"
-                className="w-12 h-12 sm:w-16 sm:h-16 rounded-full border-2 border-[#9ACBD0] object-cover"
+                className="w-12 h-12 sm:w-16 sm:h-16 rounded-full border-2 border-[#bfdbfe] object-cover"
               />
               <label
                 htmlFor="profilePicture"
-                className="absolute bottom-0 right-0 bg-[#006A71] rounded-full p-0.5 sm:p-1 cursor-pointer hover:bg-[#04828c] transition duration-300"
+                className="absolute bottom-0 right-0 bg-[#2563eb] rounded-full p-0.5 sm:p-1 cursor-pointer hover:bg-[#04828c] transition duration-300"
               >
                 <FaPencilAlt className="w-2 h-2 sm:w-3 sm:h-3 text-[#ffffff]" />
               </label>
@@ -445,14 +445,14 @@ const Profile = () => {
               />
             </div>
             <div className="flex-1">
-              <p className="text-lg sm:text-xl font-semibold text-[#006A71]">{user.username || 'Your Name'}</p>
+              <p className="text-lg sm:text-xl font-semibold text-[#2563eb]">{user.username || 'Your Name'}</p>
               <p className="text-sm text-[#1e1e1e]">{user.email || 'yourname@gmail.com'}</p>
             </div>
           </div>
 
           {error && <p className="text-[#ef4444] text-xs sm:text-sm mb-4">{error}</p>}
           {age !== null && (
-            <div className="inline-block bg-[#006A71] text-[#ffffff] rounded-full px-3 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm lg:text-base font-semibold shadow-md mb-4">
+            <div className="inline-block bg-[#2563eb] text-[#ffffff] rounded-full px-3 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm lg:text-base font-semibold shadow-md mb-4">
               Age: {age} years
             </div>
           )}
@@ -467,7 +467,7 @@ const Profile = () => {
                 value={user.username}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-xs sm:text-sm lg:text-base"
+                className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-[#bfdbfe] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb] text-[#1e1e1e] text-xs sm:text-sm lg:text-base"
               />
             </div>
             <div className="space-y-2">
@@ -478,7 +478,7 @@ const Profile = () => {
                 name="email"
                 value={user.email}
                 disabled
-                className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-[#9ACBD0] rounded-lg bg-gray-100 text-[#1e1e1e] text-xs sm:text-sm lg:text-base cursor-not-allowed"
+                className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-[#bfdbfe] rounded-lg bg-gray-100 text-[#1e1e1e] text-xs sm:text-sm lg:text-base cursor-not-allowed"
               />
             </div>
             <div className="space-y-2">
@@ -489,7 +489,7 @@ const Profile = () => {
                 name="birthdate"
                 value={user.birthdate}
                 onChange={handleChange}
-                className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-xs sm:text-sm lg:text-base"
+                className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-[#bfdbfe] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb] text-[#1e1e1e] text-xs sm:text-sm lg:text-base"
               />
             </div>
             <div className="space-y-2">
@@ -501,7 +501,7 @@ const Profile = () => {
                 value={user.mobile_phone}
                 onChange={handleChange}
                 placeholder="Add number"
-                className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-xs sm:text-sm lg:text-base"
+                className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-[#bfdbfe] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb] text-[#1e1e1e] text-xs sm:text-sm lg:text-base"
               />
             </div>
             <div className="space-y-2">
@@ -512,12 +512,12 @@ const Profile = () => {
                 name="country"
                 value={user.country}
                 onChange={handleChange}
-                className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-xs sm:text-sm lg:text-base"
+                className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-[#bfdbfe] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb] text-[#1e1e1e] text-xs sm:text-sm lg:text-base"
               />
             </div>
             <button
               type="submit"
-              className="w-full bg-[#006A71] hover:bg-[#04828c] text-[#ffffff] font-semibold py-2 sm:py-3 rounded-lg transition duration-300 text-xs sm:text-sm lg:text-base"
+              className="w-full bg-[#2563eb] hover:bg-[#04828c] text-[#ffffff] font-semibold py-2 sm:py-3 rounded-lg transition duration-300 text-xs sm:text-sm lg:text-base"
             >
               Save Changes
             </button>
@@ -527,37 +527,37 @@ const Profile = () => {
         {/* Change Password */}
         {showPasswordForm && (
           <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 mb-6">
-            <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#006A71] mb-4">Set a New Password</h2>
+            <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#2563eb] mb-4">Set a New Password</h2>
             <p className="text-[#1e1e1e] text-xs sm:text-sm lg:text-base mb-4">
               You registered with Google. Please set a new password to manage your account more easily.
             </p>
             <form onSubmit={handleChangePassword} className="space-y-4">
               <div className="space-y-2 relative">
                 <label htmlFor="newPassword" className="block text-[#1e1e1e] text-xs sm:text-sm font-medium">New Password</label>
-                <FaLock className="absolute left-3 top-9 sm:top-10 transform -translate-y-1/2 text-[#48A6A7] w-4 h-4 sm:w-5 sm:h-5" />
+                <FaLock className="absolute left-3 top-9 sm:top-10 transform -translate-y-1/2 text-[#3b82f6] w-4 h-4 sm:w-5 sm:h-5" />
                 <input
                   type="password"
                   id="newPassword"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-xs sm:text-sm lg:text-base"
+                  className="w-full pl-10 pr-4 py-2 border border-[#bfdbfe] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb] text-[#1e1e1e] text-xs sm:text-sm lg:text-base"
                 />
               </div>
               <div className="space-y-2 relative">
                 <label htmlFor="confirmPassword" className="block text-[#1e1e1e] text-xs sm:text-sm font-medium">Confirm Password</label>
-                <FaLock className="absolute left-3 top-9 sm:top-10 transform -translate-y-1/2 text-[#48A6A7] w-4 h-4 sm:w-5 sm:h-5" />
+                <FaLock className="absolute left-3 top-9 sm:top-10 transform -translate-y-1/2 text-[#3b82f6] w-4 h-4 sm:w-5 sm:h-5" />
                 <input
                   type="password"
                   id="confirmPassword"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-xs sm:text-sm lg:text-base"
+                  className="w-full pl-10 pr-4 py-2 border border-[#bfdbfe] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb] text-[#1e1e1e] text-xs sm:text-sm lg:text-base"
                 />
               </div>
               {passwordError && <p className="text-[#ef4444] text-xs sm:text-sm">{passwordError}</p>}
               <button
                 type="submit"
-                className="w-full bg-[#006A71] hover:bg-[#04828c] text-[#ffffff] font-semibold py-2 sm:py-3 rounded-lg transition duration-300 text-xs sm:text-sm lg:text-base"
+                className="w-full bg-[#2563eb] hover:bg-[#04828c] text-[#ffffff] font-semibold py-2 sm:py-3 rounded-lg transition duration-300 text-xs sm:text-sm lg:text-base"
               >
                 Change Password
               </button>
@@ -567,20 +567,20 @@ const Profile = () => {
 
         {/* Campaigns */}
         <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 mb-6">
-          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#006A71] mb-4">Your Campaigns</h2>
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#2563eb] mb-4">Your Campaigns</h2>
           {projects.length > 0 ? (
             <ul className="space-y-3">
               {projects.map(project => (
                 <li key={project.id} className="flex flex-col sm:flex-row sm:items-center justify-between bg-[#f9fafb] p-3 rounded-lg">
                   <div className="flex items-center gap-3 mb-2 sm:mb-0">
-                    <span className="text-[#006A71] text-lg">📋</span>
+                    <span className="text-[#2563eb] text-lg">📋</span>
                     <div>
                       <p className="text-[#1e1e1e] font-semibold text-xs sm:text-sm lg:text-base">
                         <a
                           href={`/projects/${project.id}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[#006A71] hover:underline"
+                          className="text-[#2563eb] hover:underline"
                         >
                           {project.title}
                         </a>
@@ -591,7 +591,7 @@ const Profile = () => {
                   <div className="flex gap-2">
                     <button
                       onClick={() => navigate(`/projects/${project.id}/update`)}
-                      className="bg-[#9ACBD0] hover:bg-[#48A6A7] text-[#1e1e1e] text-xs sm:text-sm font-semibold px-3 py-1 rounded-lg transition duration-300 flex items-center gap-1 self-start sm:self-center"
+                      className="bg-[#bfdbfe] hover:bg-[#3b82f6] text-[#1e1e1e] text-xs sm:text-sm font-semibold px-3 py-1 rounded-lg transition duration-300 flex items-center gap-1 self-start sm:self-center"
                     >
                       <span>Update</span>
                       <span>✏️</span>
@@ -685,7 +685,7 @@ const Profile = () => {
 
         {/* Donations */}
         <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 mb-6">
-          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#006A71] mb-4">Your Donations</h2>
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#2563eb] mb-4">Your Donations</h2>
           <p className="text-[#1e1e1e] text-xs sm:text-sm lg:text-base mb-4">Total Donations: ${totalDonations.toFixed(2)}</p>
           {donations.length > 0 ? (
             <ul className="space-y-3">
@@ -697,7 +697,7 @@ const Profile = () => {
                     key={donation.id}
                     className={`flex flex-col sm:flex-row sm:items-center bg-[#f9fafb] p-3 rounded-lg ${isProjectDeleted ? 'opacity-60' : ''}`}
                   >
-                    <span className="text-[#006A71] text-lg mr-3 sm:mr-3">💸</span>
+                    <span className="text-[#2563eb] text-lg mr-3 sm:mr-3">💸</span>
                     <div className="flex-1">
                       <p className={`text-[#1e1e1e] font-semibold text-xs sm:text-sm lg:text-base ${isProjectDeleted ? 'line-through text-gray-500' : ''}`}>
                         {isProjectDeleted ? (
@@ -731,7 +731,7 @@ const Profile = () => {
 
         {/* Delete Account */}
         <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 mb-6">
-          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#006A71] mb-4">Delete Account</h2>
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#2563eb] mb-4">Delete Account</h2>
           <p className="text-[#1e1e1e] text-xs sm:text-sm lg:text-base mb-4">
             This action is permanent and cannot be undone.
           </p>
@@ -746,7 +746,7 @@ const Profile = () => {
 
       {/* Account Deletion Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-[#F2EFE7] bg-opacity-80 flex items-center justify-center px-4 py-6 z-40">
+        <div className="fixed inset-0 bg-[#eff6ff] bg-opacity-80 flex items-center justify-center px-4 py-6 z-40">
           <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 w-full max-w-sm sm:max-w-md relative">
             <button
               onClick={() => {
@@ -758,27 +758,27 @@ const Profile = () => {
             >
               <FaTimes className="w-5 h-5" />
             </button>
-            <h3 className="text-base sm:text-lg lg:text-xl font-bold text-[#006A71] mb-4">Confirm Account Deletion</h3>
+            <h3 className="text-base sm:text-lg lg:text-xl font-bold text-[#2563eb] mb-4">Confirm Account Deletion</h3>
             <p className="text-[#1e1e1e] text-xs sm:text-sm lg:text-base mb-4">
               Are you sure you want to delete your account? This action cannot be undone.
             </p>
             <div className="space-y-2 relative">
               <label htmlFor="deletePassword" className="block text-[#1e1e1e] text-xs sm:text-sm font-medium">Enter Password</label>
-              <FaLock className="absolute left-3 top-9 sm:top-10 transform -translate-y-1/2 text-[#48A6A7] w-4 h-4 sm:w-5 sm:h-5" />
+              <FaLock className="absolute left-3 top-9 sm:top-10 transform -translate-y-1/2 text-[#3b82f6] w-4 h-4 sm:w-5 sm:h-5" />
               <input
                 type="password"
                 id="deletePassword"
                 value={deletePassword}
                 onChange={(e) => setDeletePassword(e.target.value)}
                 required
-                className="w-full pl-10 pr-4 py-2 border border-[#9ACBD0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A71] text-[#1e1e1e] text-xs sm:text-sm lg:text-base"
+                className="w-full pl-10 pr-4 py-2 border border-[#bfdbfe] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2563eb] text-[#1e1e1e] text-xs sm:text-sm lg:text-base"
               />
             </div>
             {error && <p className="text-[#ef4444] text-xs sm:text-sm mt-2">{error}</p>}
             <div className="flex flex-col sm:flex-row gap-3 mt-6">
               <button
                 onClick={handleDelete}
-                className="w-full bg-[#006A71] hover:bg-[#04828c] text-[#ffffff] font-semibold py-2 rounded-lg transition duration-300 text-xs sm:text-sm lg:text-base"
+                className="w-full bg-[#2563eb] hover:bg-[#04828c] text-[#ffffff] font-semibold py-2 rounded-lg transition duration-300 text-xs sm:text-sm lg:text-base"
               >
                 Confirm
               </button>
@@ -799,7 +799,7 @@ const Profile = () => {
 
       {/* Campaign Deletion Modal */}
       {isDeleteProjectModalOpen && projectToDelete && (
-        <div className="fixed inset-0 bg-[#F2EFE7] bg-opacity-80 flex items-center justify-center px-4 py-6 z-40">
+        <div className="fixed inset-0 bg-[#eff6ff] bg-opacity-80 flex items-center justify-center px-4 py-6 z-40">
           <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 w-full max-w-sm sm:max-w-md relative">
             <button
               onClick={() => {
@@ -811,7 +811,7 @@ const Profile = () => {
             >
               <FaTimes className="w-5 h-5" />
             </button>
-            <h3 className="text-base sm:text-lg lg:text-xl font-bold text-[#006A71] mb-4">Confirm campaign Deletion</h3>
+            <h3 className="text-base sm:text-lg lg:text-xl font-bold text-[#2563eb] mb-4">Confirm campaign Deletion</h3>
             <p className="text-[#1e1e1e] text-xs sm:text-sm lg:text-base mb-4">
               Are you sure you want to delete the campaign "{projectToDelete.title}"? This action cannot be undone.
             </p>
@@ -819,7 +819,7 @@ const Profile = () => {
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={handleDeleteProject}
-                className="w-full bg-[#006A71] hover:bg-[#04828c] text-[#ffffff] font-semibold py-2 rounded-lg transition duration-300 text-xs sm:text-sm lg:text-base"
+                className="w-full bg-[#2563eb] hover:bg-[#04828c] text-[#ffffff] font-semibold py-2 rounded-lg transition duration-300 text-xs sm:text-sm lg:text-base"
               >
                 Confirm
               </button>
