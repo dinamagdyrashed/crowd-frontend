@@ -51,8 +51,8 @@ const DonationPage = () => {
                     phone_number: '',
                     country: ''
                 },
-                notification_url: 'https://1357-102-189-207-6.ngrok-free.app/api/projects/paymob/callback/',// Backend callback
-                redirection_url: `https://a64d-102-189-207-6.ngrok-free.app/projects/${id}/?payment=success` // Frontend redirect
+                notification_url: 'https://ccc1-102-189-207-6.ngrok-free.app/api/projects/paymob/callback/',// Backend callback
+                redirection_url: `https://d487-102-189-207-6.ngrok-free.app/projects/${id}/?payment=success` // Frontend redirect
             }, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
@@ -162,7 +162,7 @@ const DonationPage = () => {
                         </form>
 
                         <div className="mt-6 text-center text-sm text-[#1e1e1e]">
-                            <p>Your donation will help bring this project to life.</p>
+                            <p>One Step from You, a Life for Someone Else.</p>
                             <p className="mt-1">Thank you for your support!</p>
                         </div>
                     </div>
