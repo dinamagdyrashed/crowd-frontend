@@ -3,7 +3,6 @@ import DescriptionSection from "./DescriptionSection";
 import { FaStar, FaFolder } from 'react-icons/fa';
 import { motion } from "framer-motion";
 
-// Animation variants
 const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {

@@ -109,18 +109,17 @@ const Navbar = () => {
 
         {/* Left side - hidden on mobile */}
         <div className="hidden md:flex items-center space-x-4">
-          <NavLink to="/home" className="hover:text-[#006A71]">
-            Home
-          </NavLink>
+
           <NavLink to="/campaigns" className="hover:text-[#006A71]">
             Campaigns
-          </NavLink>
-          <NavLink to="/categories" className="hover:text-[#006A71]">
-            Categories
           </NavLink>
           <NavLink to="/finished-campaigns" className="hover:text-[#006A71]">
             Finished Campaigns
           </NavLink>
+          <NavLink to="/categories" className="hover:text-[#006A71]">
+            Categories
+          </NavLink>
+
         </div>
 
         {/* Center logo */}
