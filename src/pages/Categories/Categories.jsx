@@ -7,7 +7,6 @@ import {
   FaArrowRight
 } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaExclamationCircle } from 'react-icons/fa';
 import AuthPopup from '../../components/AuthPopup';
 
 const COLORS = {
@@ -244,14 +243,14 @@ const Categories = () => {
                   </div>
 
                   <div className="text-right mt-6">
-                    <a
-                      href="#"
+                    <Link
+                      to={`/categories/${category.id}`}
                       className="text-sm font-semibold inline-flex items-center hover:underline"
                       style={{ color: COLORS.primary }}
                     >
                       See more
                       <FaArrowRight className="ml-2 relative top-0.5" style={{ color: COLORS.primary }} />
-                    </a>
+                    </Link>
                   </div>
                 </div>
 

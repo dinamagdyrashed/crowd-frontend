@@ -111,7 +111,11 @@ const Home = () => {
 
     const handleDonateNow = (projectId) => {
         const token = localStorage.getItem('accessToken');
-        token ? navigate(`/projects/${projectId}/donate`) : setShowAuthPopup(true);
+        if (!token) {
+            setShowAuthPopup(true);
+        } else {
+            navigate(`/projects/${projectId}/donate`);
+        }
     };
 
     const handleAuthConfirm = () => {

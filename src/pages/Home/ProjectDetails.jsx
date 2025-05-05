@@ -3,11 +3,12 @@ import axios from 'axios';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import Slider from "react-slick";
 import Alert from '../../alert/Alert';
-import { FaExclamationCircle, FaSpinner, FaFlag, FaComment, FaDonate, FaEdit, FaTimes, FaShareAlt, FaFacebook, FaWhatsapp, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { FaExclamationCircle, FaSpinner, FaFlag, FaComment, FaDonate, FaEdit, FaTimes, FaShareAlt, FaFacebook, FaWhatsapp, FaTwitter, FaLinkedin, FaArrowRight } from 'react-icons/fa';
+import { motion, AnimatePresence } from "framer-motion";
+import AuthPopup from '../../components/AuthPopup';
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { motion, AnimatePresence } from "framer-motion";
 
 const DescriptionSection = memo(({ details }) => {
     const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
@@ -73,6 +74,7 @@ const ProjectDetails = () => {
     const [reportTargetId, setReportTargetId] = useState(null);
     const [reportedBy, setReportedBy] = useState(null);
     const [showShareDropdown, setShowShareDropdown] = useState(false);
+    const [showAuthPopup, setShowAuthPopup] = useState(false);
 
     const [comments, setComments] = useState([]);
     const [newCommentText, setNewCommentText] = useState('');
@@ -85,7 +87,6 @@ const ProjectDetails = () => {
     const [similarLoading, setSimilarLoading] = useState(false);
     const [similarError, setSimilarError] = useState(null);
     const shareButtonRef = useRef(null);
-
 
     const sliderSettings = {
         dots: true,
@@ -120,11 +121,9 @@ const ProjectDetails = () => {
                     'Content-Type': 'application/json',
                 },
             });
-            // Update the states with the new rating value from the response
             setPreviousRating(response.data.value);
             setUserRating(response.data.value);
             Alert.success('Rating submitted!', 'Thank you for your feedback.');
-            // Refresh project details to update average rating
             await fetchProjectDetails();
         } catch (err) {
             console.error('Rating submission error:', err.response?.data);
@@ -150,8 +149,6 @@ const ProjectDetails = () => {
                 setUserRating(response.data.value);
             }
         } catch (err) {
-            // If user is not authenticated or rating doesn't exist, reset the states
-            console.log('rrrr', err)
             if (err.response?.status === 404 || err.response?.status === 401) {
                 setPreviousRating(null);
                 setUserRating(0);
@@ -200,13 +197,10 @@ const ProjectDetails = () => {
         }
     }, [id]);
 
-
-    // Toggle dropdown
     const handleShare = () => {
         setShowShareDropdown(prev => !prev);
     };
 
-    // Close dropdown if clicked outside
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (shareButtonRef.current && !shareButtonRef.current.contains(event.target)) {
@@ -218,9 +212,6 @@ const ProjectDetails = () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-
-
-
 
     const postComment = async (parentId = null) => {
         if ((parentId === null && !newCommentText.trim()) || (parentId !== null && !replyText.trim())) {
@@ -251,6 +242,11 @@ const ProjectDetails = () => {
     };
 
     const openReportModal = (type, targetId) => {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            setShowAuthPopup(true);
+            return;
+        }
         setReportType(type);
         setReportTargetId(targetId);
         setReportReason('');
@@ -288,9 +284,21 @@ const ProjectDetails = () => {
         }
     };
 
-    // const handleShare = () => {
-    //     setShowShareDropdown(!showShareDropdown);
-    // };
+    const openShareWindow = async (platform, url) => {
+        window.open(url, '_blank', 'width=600,height=400');
+        try {
+            await axios.post('http://localhost:8000/api/projects/shares/', {
+                project: project.id,
+                platform: platform,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                },
+            });
+        } catch (err) {
+            console.error('Error logging share event:', err);
+        }
+    };
 
     const shareLinks = project ? [
         {
@@ -314,22 +322,6 @@ const ProjectDetails = () => {
             url: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(`${window.location.origin}/projects/${id}`)}&title=${encodeURIComponent(project.title)}&summary=${encodeURIComponent(project.details.substring(0, 200))}`,
         },
     ] : [];
-    // New function to open social media share windows and log share event
-    const openShareWindow = async (platform, url) => {
-        window.open(url, '_blank', 'width=600,height=400');
-        try {
-            await axios.post('http://localhost:8000/api/projects/shares/', {
-                project: project.id,
-                platform: platform,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-                },
-            });
-        } catch (err) {
-            console.error('Error logging share event:', err);
-        }
-    };
     const renderComments = (commentsList) => {
         return commentsList.map((comment) => (
             <div key={comment.id} className="border border-[#9ACBD0] rounded-lg p-4 mb-3 bg-[#F2EFE7] relative">
@@ -384,7 +376,6 @@ const ProjectDetails = () => {
         ));
     };
 
-
     if (loading) return (
         <div className="flex items-center justify-center min-h-screen bg-[#F2EFE7]">
             <div className="text-[#006A71]">
@@ -401,6 +392,18 @@ const ProjectDetails = () => {
             </div>
         </div>
     );
+
+    const isAuthenticated = !!localStorage.getItem('accessToken');
+
+    const handleAuthAction = (action) => {
+        if (!isAuthenticated) {
+            setShowAuthPopup(true);
+        } else {
+            action();
+        }
+    };
+
+    const handleDonate = () => navigate(`/projects/${id}/donate`);
 
     return (
         <div className="min-h-screen bg-[#F2EFE7] flex items-center justify-center py-10 px-4">
@@ -546,7 +549,7 @@ const ProjectDetails = () => {
                         )}
                         {previousRating === null && !ratingLoading && (
                             <button
-                                onClick={() => handleRatingSubmit(userRating)}
+                                onClick={() => handleAuthAction(() => handleRatingSubmit(userRating))}
                                 className={`w-full p-2 rounded-lg ${!userRating ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#48A6A7] hover:bg-[#006A71] text-white'
                                     } transition duration-200`}
                                 disabled={!userRating}
@@ -598,7 +601,7 @@ const ProjectDetails = () => {
 
                     <div className="flex flex-wrap justify-center gap-4 mb-8 relative">
                         <button
-                            onClick={() => navigate(`/projects/${id}/donate`)}
+                            onClick={() => handleAuthAction(handleDonate)}
                             className={`flex items-center px-6 py-3 rounded-lg ${project.total_donations >= project.total_target
                                 ? 'bg-gray-400 cursor-not-allowed'
                                 : 'bg-[#48A6A7] hover:bg-[#006A71] text-white'
@@ -609,9 +612,8 @@ const ProjectDetails = () => {
                             {project.total_donations >= project.total_target ? 'Target Reached' : 'Donate Now'}
                         </button>
 
-
                         <button
-                            onClick={() => openReportModal('project', project.id)}
+                            onClick={() => handleAuthAction(() => openReportModal('project', project.id))}
                             className="flex items-center px-6 py-3 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-white transition duration-200"
                         >
                             <FaFlag className="mr-2" />
@@ -620,7 +622,7 @@ const ProjectDetails = () => {
 
                         <div ref={shareButtonRef} className="relative">
                             <button
-                                onClick={handleShare}
+                                onClick={() => handleAuthAction(handleShare)}
                                 className="flex items-center px-6 py-3 rounded-lg bg-[#006A71] hover:bg-[#48A6A7] text-white transition duration-200"
                             >
                                 <FaShareAlt className="mr-2" />
@@ -655,10 +657,7 @@ const ProjectDetails = () => {
                                 )}
                             </AnimatePresence>
                         </div>
-
                     </div>
-
-
 
                     <div className="border-t border-[#9ACBD0] pt-6">
                         <h2 className="text-xl font-bold text-[#006A71] mb-4 flex items-center">
@@ -684,7 +683,7 @@ const ProjectDetails = () => {
                             <div className="flex justify-end mt-2">
                                 <button
                                     className="bg-[#48A6A7] text-white px-4 py-2 rounded-lg hover:bg-[#006A71] transition duration-200"
-                                    onClick={() => postComment(null)}
+                                    onClick={() => handleAuthAction(postComment)}
                                 >
                                     Post Comment
                                 </button>
@@ -746,6 +745,8 @@ const ProjectDetails = () => {
                         </motion.div>
                     </div>
                 )}
+
+                {showAuthPopup && <AuthPopup onConfirm={() => navigate('/register')} onCancel={() => setShowAuthPopup(false)} />}
 
                 <div className="p-6 sm:p-8">
                     <div className="mb-8">
